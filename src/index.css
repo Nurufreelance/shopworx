@@ -1,0 +1,62 @@
+﻿@import "@fontsource/inter";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root{
+    width:100%;
+    height:100%;
+}
+
+body{
+
+    margin:0;
+
+    font-family:"Inter",sans-serif;
+
+    background:#F8FAFC;
+
+    color:#111827;
+
+    overflow:hidden;
+
+}
+
+*{
+
+box-sizing:border-box;
+
+}
+
+button{
+
+cursor:pointer;
+
+font-family:inherit;
+
+}
+
+::-webkit-scrollbar{
+
+width:8px;
+
+height:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#cbd5e1;
+
+border-radius:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:white;
+
+}
