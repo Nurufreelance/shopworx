@@ -1,3 +1,3 @@
-export { DashboardLayout } from './DashboardLayout';
-export { Sidebar } from './Sidebar';
-export { Header } from './Header';
+export { default as DashboardLayout } from "./DashboardLayout";
+export { default as Sidebar } from "./Sidebar";
+export { default as Header } from "./Header";

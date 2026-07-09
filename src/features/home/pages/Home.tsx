@@ -1,34 +1,33 @@
 import KPISection from "../components/KPISection";
+
 import OEEChart from "../components/OEEChart";
 import ShiftSummary from "../components/ShiftSummary";
 
 import ProductionOverviewChart from "../components/ProductionOverviewChart";
 import ProductionTrendChart from "../components/ProductionTrendChart";
 
-import ProductionTarget from "../components/ProductionTarget";
-import TodayProduction from "../components/TodayProduction";
-import AvailabilityCard from "../components/AvailabilityCard";
-
 import MachineStatus from "../components/MachineStatus";
 import MachineErrors from "../components/MachineErrors";
 
-import ProductionByHour from "../components/ProductionByHour";
-import ProductionByShift from "../components/ProductionByShift";
-
-import DowntimeSummary from "../components/DowntimeSummary";
-import DowntimeTrend from "../components/DowntimeTrend";
 import QualitySummary from "../components/QualitySummary";
+import AvailabilityCard from "../components/AvailabilityCard";
+
+import ProductionByHour from "../components/ProductionByHour";
+import DowntimeTrend from "../components/DowntimeTrend";
+
 import UtilizationCard from "../components/UtilizationCard";
+import DowntimeSummary from "../components/DowntimeSummary";
 
 export default function Home() {
   return (
-    <div className="max-w-[1700px] mx-auto p-6 space-y-6">
+    <div className="space-y-7">
 
-      {/* KPI Cards */}
+      {/* KPI */}
       <KPISection />
 
-      {/* OEE + Shift Summary */}
-      <div className="grid grid-cols-12 gap-6">
+      {/* OEE + Shift */}
+      <section className="grid grid-cols-12 gap-6 items-stretch">
+
         <div className="col-span-8">
           <OEEChart />
         </div>
@@ -36,75 +35,73 @@ export default function Home() {
         <div className="col-span-4">
           <ShiftSummary />
         </div>
-      </div>
 
-      {/* Production Metrics */}
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-4">
-          <ProductionTarget />
-        </div>
+      </section>
 
-        <div className="col-span-4">
-          <TodayProduction />
-        </div>
+      {/* Production */}
+      <section className="grid grid-cols-12 gap-6 items-stretch">
 
-        <div className="col-span-4">
-          <AvailabilityCard />
-        </div>
-      </div>
-
-      {/* Machine Status */}
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-7">
-          <MachineStatus />
-        </div>
-
-        <div className="col-span-5">
-          <MachineErrors />
-        </div>
-      </div>
-
-      {/* Production Charts */}
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-6">
+        <div className="col-span-8">
           <ProductionOverviewChart />
         </div>
 
-        <div className="col-span-6">
+        <div className="col-span-4">
           <ProductionTrendChart />
         </div>
-      </div>
 
-      {/* Analytics */}
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-6">
-          <ProductionByHour />
+      </section>
+
+      {/* Machines */}
+      <section className="grid grid-cols-12 gap-6 items-stretch">
+
+        <div className="col-span-8">
+          <MachineStatus />
         </div>
 
-        <div className="col-span-6">
-          <ProductionByShift />
-        </div>
-      </div>
-
-      {/* Bottom Section */}
-      <div className="grid grid-cols-12 gap-6">
         <div className="col-span-4">
-          <DowntimeSummary />
+          <MachineErrors />
+        </div>
+
+      </section>
+
+      {/* Quality */}
+      <section className="grid grid-cols-12 gap-6 items-stretch">
+
+        <div className="col-span-6">
+          <QualitySummary />
+        </div>
+
+        <div className="col-span-6">
+          <AvailabilityCard />
+        </div>
+
+      </section>
+
+      {/* Hourly */}
+      <section className="grid grid-cols-12 gap-6 items-stretch">
+
+        <div className="col-span-8">
+          <ProductionByHour />
         </div>
 
         <div className="col-span-4">
           <DowntimeTrend />
         </div>
 
-        <div className="col-span-4">
-          <QualitySummary />
-        </div>
-      </div>
+      </section>
 
       {/* Utilization */}
-      <div className="pb-8">
-        <UtilizationCard />
-      </div>
+      <section className="grid grid-cols-12 gap-6 items-stretch">
+
+        <div className="col-span-8">
+          <UtilizationCard />
+        </div>
+
+        <div className="col-span-4">
+          <DowntimeSummary />
+        </div>
+
+      </section>
 
     </div>
   );

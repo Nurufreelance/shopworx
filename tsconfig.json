@@ -3,15 +3,33 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
     "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "jsx": "react-jsx",
+
+    "strict": true,
+
     "skipLibCheck": true,
+
+    "isolatedModules": true,
+
+    "resolveJsonModule": true,
+
+    "allowImportingTsExtensions": true,
+
+    "noEmit": true,
+
     "baseUrl": ".",
+
     "paths": {
       "@/*": ["src/*"],
       "@app/*": ["src/app/*"],
       "@assets/*": ["src/assets/*"],
       "@shared/*": ["src/components/shared/*"],
       "@components/*": ["src/components/*"],
+      "@context/*": ["src/context/*"],
       "@features/*": ["src/features/*"],
       "@hooks/*": ["src/hooks/*"],
       "@layouts/*": ["src/layouts/*"],
@@ -22,21 +40,8 @@
       "@utils/*": ["src/utils/*"],
       "@theme/*": ["src/theme/*"],
       "@routes/*": ["src/routes/*"]
-    },
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+
+  "include": ["src"]
 }

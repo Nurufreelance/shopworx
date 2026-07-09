@@ -1,8 +1,4 @@
-import {
-  TrendingUp,
-  TrendingDown,
-} from "lucide-react";
-
+import { TrendingUp, TrendingDown } from "lucide-react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -29,10 +25,10 @@ const chartData = [
 ];
 
 const colors = {
-  blue: "#3B82F6",
-  green: "#10B981",
-  orange: "#F97316",
-  purple: "#8B5CF6",
+  blue: "#2F80ED",
+  green: "#27AE60",
+  orange: "#F2994A",
+  purple: "#9B51E0",
 };
 
 export default function KPICard({
@@ -46,32 +42,32 @@ export default function KPICard({
   return (
     <div
       className="
-      rounded-2xl
-      border
-      border-gray-200
       bg-white
-      p-5
+      border
+      border-[#E7EBF0]
+      rounded-lg
+      px-5
+      py-4
       shadow-sm
-      transition-all
-      duration-200
       hover:shadow-md
+      transition-all
       "
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between">
 
         <div>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-[13px] font-medium text-slate-500">
             {title}
           </p>
 
-          <div className="mt-2 flex items-end gap-2">
+          <div className="mt-2 flex items-end gap-1">
 
-            <h2 className="text-3xl font-bold text-slate-800">
+            <h2 className="text-[30px] font-semibold leading-none text-[#22304A]">
               {value}
             </h2>
 
-            <span className="pb-1 text-sm text-gray-500">
+            <span className="pb-1 text-xs text-slate-400">
               {unit}
             </span>
 
@@ -80,19 +76,19 @@ export default function KPICard({
         </div>
 
         <div
-          className="flex h-12 w-12 items-center justify-center rounded-xl"
+          className="rounded-md p-2"
           style={{
-            backgroundColor: `${colors[color]}20`,
+            backgroundColor: `${colors[color]}18`,
           }}
         >
           {positive ? (
             <TrendingUp
-              size={24}
+              size={18}
               color={colors[color]}
             />
           ) : (
             <TrendingDown
-              size={24}
+              size={18}
               color={colors[color]}
             />
           )}
@@ -100,7 +96,7 @@ export default function KPICard({
 
       </div>
 
-      <div className="mt-5 h-14">
+      <div className="mt-3 h-10">
 
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
@@ -108,19 +104,19 @@ export default function KPICard({
               type="monotone"
               dataKey="value"
               stroke={colors[color]}
+              strokeWidth={2}
               fill={colors[color]}
-              fillOpacity={0.15}
-              strokeWidth={2.5}
+              fillOpacity={0.12}
             />
           </AreaChart>
         </ResponsiveContainer>
 
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-2 flex items-center justify-between">
 
         <span
-          className={`text-sm font-semibold ${
+          className={`text-xs font-semibold ${
             positive
               ? "text-green-600"
               : "text-red-500"
@@ -129,12 +125,11 @@ export default function KPICard({
           {change}
         </span>
 
-        <span className="text-xs text-gray-400">
+        <span className="text-[11px] text-slate-400">
           vs yesterday
         </span>
 
       </div>
-
     </div>
   );
 }

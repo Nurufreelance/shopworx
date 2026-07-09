@@ -11,18 +11,16 @@ interface Props {
 
 export default function OEEGauge({ value }: Props) {
   return (
-    <div className="h-72">
+    <div className="relative h-[270px]">
 
-      <ResponsiveContainer>
-
+      <ResponsiveContainer width="100%" height="100%">
         <RadialBarChart
-          innerRadius="70%"
+          innerRadius="72%"
           outerRadius="100%"
           data={[{ value }]}
           startAngle={180}
           endAngle={0}
         >
-
           <PolarAngleAxis
             type="number"
             domain={[0, 100]}
@@ -31,26 +29,25 @@ export default function OEEGauge({ value }: Props) {
 
           <RadialBar
             dataKey="value"
-            fill="#F97316"
-            cornerRadius={12}
+            fill="#F2994A"
+            cornerRadius={30}
+            background
           />
-
         </RadialBarChart>
-
       </ResponsiveContainer>
 
-      <div className="-mt-24 text-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center pt-8">
 
-        <h1 className="text-5xl font-bold">
+        <span className="text-xs uppercase tracking-wider text-slate-400">
+          OEE
+        </span>
 
+        <h1 className="mt-1 text-5xl font-bold text-slate-800">
           {value}%
-
         </h1>
 
-        <p className="text-gray-500">
-
-          Overall Equipment Effectiveness
-
+        <p className="mt-2 text-sm text-slate-500">
+          Overall Effectiveness
         </p>
 
       </div>

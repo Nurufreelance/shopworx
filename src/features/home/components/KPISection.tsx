@@ -2,7 +2,7 @@ import KPICard from "./KPICard";
 
 export default function KPISection() {
   return (
-    <div className="grid grid-cols-4 gap-6">
+    <div className="grid gap-6 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1">
 
       <KPICard
         title="Today's Production"

@@ -1,66 +1,69 @@
 import {
-    Plus,
-    ArrowUpDown,
-    Filter,
-    Wrench,
+  SearchBox,
+  DateRangePicker,
+  ToolbarButton,
+  ViewSwitcher,
+} from "@components/common/Toolbar";
+
+import {
+  Filter,
+  Plus,
+  ArrowUpDown,
+  Wrench,
 } from "lucide-react";
 
 export default function PlanningToolbar() {
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
 
-    return (
+      <div className="flex flex-wrap items-center justify-between gap-5">
 
-        <div className="flex justify-between items-center">
+        {/* Left */}
 
-            <h2 className="text-3xl">
+        <div className="flex flex-wrap items-center gap-4">
 
-                7 Jul, 2026 - 7 Jul, 2026
+          <SearchBox placeholder="Search plan, part, machine..." />
 
-            </h2>
-
-            <div className="flex gap-3">
-
-                <button className="bg-green-500 text-white px-5 py-2 rounded">
-
-                    <Wrench className="inline mr-2" size={18} />
-
-                    Equipment Change
-
-                </button>
-
-                <button className="bg-[#3548A5] text-white px-5 py-2 rounded">
-
-                    <Plus className="inline mr-2" size={18} />
-
-                    Add new plan
-
-                </button>
-
-                <button className="border px-4 py-2 rounded">
-
-                    <ArrowUpDown className="inline mr-2" size={18} />
-
-                    Re-order plans
-
-                </button>
-
-                <button className="border px-4 py-2 rounded">
-
-                    List
-
-                </button>
-
-                <button className="border px-4 py-2 rounded">
-
-                    <Filter className="inline mr-2" size={18} />
-
-                    Filters
-
-                </button>
-
-            </div>
+          <DateRangePicker />
 
         </div>
 
-    );
+        {/* Right */}
 
+        <div className="flex flex-wrap items-center gap-3">
+
+          <ToolbarButton
+            icon={<Filter size={16} />}
+          >
+            Filters
+          </ToolbarButton>
+
+          <ToolbarButton
+            icon={<ArrowUpDown size={16} />}
+          >
+            Re-order
+          </ToolbarButton>
+
+          <ToolbarButton
+            variant="secondary"
+            icon={<Wrench size={16} />}
+          >
+            Equipment Change
+          </ToolbarButton>
+
+          <ToolbarButton
+            variant="primary"
+            icon={<Plus size={16} />}
+          >
+            Add New Plan
+          </ToolbarButton>
+
+          <ViewSwitcher />
+
+        </div>
+
+      </div>
+
+    </div>
+  );
 }

@@ -8,20 +8,20 @@ const Home = lazy(() => import("@features/home/pages/Home"));
 
 // Production Planning (OUR NEW PAGE)
 const ProductionPlanning = lazy(
-  () => import("@features/productionPlanning/pages/ProductionPlanning")
+  () => import("@features/production-planning/pages/ProductionPlanning")
 );
 
 // Other pages
 const ProductionLog = lazy(
-  () => import("@features/productionLog/pages/ProductionLog")
+  () => import("@features/production-log/pages/ProductionLog")
 );
 
 const DowntimeLog = lazy(
-  () => import("@features/downtimeLog/pages/DowntimeLog")
+  () => import("@features/downtime-log/pages/DowntimeLog")
 );
 
 const LiveShopfloor = lazy(
-  () => import("@features/liveShopfloor/pages/LiveShopfloor")
+  () => import("@features/live-shopfloor/pages/LiveShopfloor")
 );
 
 const Reports = lazy(
@@ -37,7 +37,7 @@ const Performance = lazy(
 );
 
 const MasterData = lazy(
-  () => import("@features/masterData/pages/MasterData")
+  () => import("@features/master-data/pages/MasterData")
 );
 
 const Settings = lazy(

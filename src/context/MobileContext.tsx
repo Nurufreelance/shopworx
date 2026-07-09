@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
-interface MobileContextType {
+  export interface MobileContextType {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;

@@ -12,12 +12,12 @@ export class ProductionService {
   }
 
   static async updatePlan(id: string, data: any) {
-    const response = await api.put(/production/plans/, data);
+    const response = await api.put(`/production/plans/${id}`, data);
     return response.data;
   }
 
   static async deletePlan(id: string) {
-    const response = await api.delete(/production/plans/);
+    const response = await api.delete(`/production/plans/${id}`);
     return response.data;
   }
 

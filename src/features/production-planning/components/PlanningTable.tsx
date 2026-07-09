@@ -1,91 +1,141 @@
-import { Star, Pencil, Copy, CircleX } from "lucide-react";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@components/common/Table";
+
+import {
+  Star,
+  Pencil,
+  Copy,
+  CircleX,
+  Play,
+  Pause,
+} from "lucide-react";
+
 import StatusDot from "./StatusDot";
 
+interface Plan {
+  plan: string;
+  part: string;
+  color: string;
+  equipment: string;
+  qty: number;
+  start: string;
+  status: "running" | "stopped";
+}
+
 interface Props {
-    plans: any[];
+  plans: Plan[];
 }
 
 export default function PlanningTable({ plans }: Props) {
+  return (
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableCell header align="center"></TableCell>
 
-    return (
+            <TableCell header>Plan</TableCell>
 
-        <table className="w-full">
+            <TableCell header>Part</TableCell>
 
-            <thead>
+            <TableCell header>Colour</TableCell>
 
-                <tr className="text-gray-500 text-sm">
+            <TableCell header>Equipment</TableCell>
 
-                    <th></th>
-                    <th>Plan</th>
-                    <th>Part</th>
-                    <th>Color</th>
-                    <th>Equipment</th>
-                    <th>Planned qty</th>
-                    <th>Start at</th>
-                    <th>Action</th>
+            <TableCell header align="right">
+              Planned Qty
+            </TableCell>
 
-                </tr>
+            <TableCell header>
+              Start At
+            </TableCell>
 
-            </thead>
+            <TableCell header align="center">
+              Actions
+            </TableCell>
+          </TableRow>
+        </TableHeader>
 
-            <tbody>
+        <TableBody>
+          {plans.map((plan) => (
+            <TableRow key={plan.plan}>
+              <TableCell align="center">
+                <StatusDot status={plan.status} />
+              </TableCell>
 
-                {plans.map((plan) => (
+              <TableCell>
+                <span className="cursor-pointer font-medium text-[#3559B7] hover:underline">
+                  {plan.plan}
+                </span>
+              </TableCell>
 
-                    <tr
-                        key={plan.plan}
-                        className="border-t h-16"
-                    >
+              <TableCell>{plan.part}</TableCell>
 
-                        <td>
+              <TableCell>{plan.color}</TableCell>
 
-                            <StatusDot status={plan.status} />
+              <TableCell>{plan.equipment}</TableCell>
 
-                        </td>
+              <TableCell align="right">
+                {plan.qty.toLocaleString()}
+              </TableCell>
 
-                        <td className="text-blue-700 underline">
+              <TableCell>{plan.start}</TableCell>
 
-                            {plan.plan}
+              <TableCell align="center">
+                <div className="flex items-center justify-center gap-2">
+                  <button className="rounded p-1 transition hover:bg-gray-100">
+                    <Star size={16} />
+                  </button>
 
-                        </td>
+                  <button className="rounded p-1 transition hover:bg-gray-100">
+                    <Pencil size={16} />
+                  </button>
 
-                        <td>{plan.part}</td>
+                  <button className="rounded p-1 transition hover:bg-gray-100">
+                    <Copy size={16} />
+                  </button>
 
-                        <td>{plan.color}</td>
+                  {plan.status === "running" ? (
+                    <button className="rounded p-1 transition hover:bg-gray-100">
+                      <Pause
+                        size={16}
+                        className="text-orange-500"
+                      />
+                    </button>
+                  ) : (
+                    <button className="rounded p-1 transition hover:bg-gray-100">
+                      <Play
+                        size={16}
+                        className="text-green-600"
+                      />
+                    </button>
+                  )}
 
-                        <td>{plan.equipment}</td>
+                  <button className="rounded p-1 transition hover:bg-gray-100">
+                    <CircleX
+                      size={16}
+                      className="text-red-500"
+                    />
+                  </button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-                        <td>{plan.qty.toLocaleString()}</td>
+      <div className="flex items-center justify-between border-x border-b border-gray-200 bg-white px-4 py-3 text-sm text-gray-500">
+        <span>
+          {plans.length} record{plans.length !== 1 ? "s" : ""}
+        </span>
 
-                        <td>{plan.start}</td>
-
-                        <td>
-
-                            <div className="flex gap-3">
-
-                                <Star size={18} />
-
-                                <Pencil size={18} />
-
-                                <Copy size={18} />
-
-                                <CircleX
-                                    size={18}
-                                    className="text-red-500"
-                                />
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                ))}
-
-            </tbody>
-
-        </table>
-
-    );
-
+        <span>ShopWorx Planning</span>
+      </div>
+    </>
+  );
 }
