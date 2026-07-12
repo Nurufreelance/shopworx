@@ -1,58 +1,48 @@
-export interface ProductionLogEntry {
+export type ProductionStatus =
+  | "Production"
+  | "Setup"
+  | "Maintenance"
+  | "Idle";
+
+export type ProductionMode =
+  | "Produced"
+  | "Trial"
+  | "Adjustment";
+
+export type RunningStatus =
+  | "Running"
+  | "Stopped";
+
+export interface ProductionLog {
   id: string;
-  machineId: string;
-  machineName: string;
+
+  machine: string;
+
+  part: string;
+
+  colour: string;
+
+  productionStatus: ProductionStatus;
+
+  productionMode: ProductionMode;
+
+  producedQty: number;
+
+  acceptedQty: number;
+
+  rejectedQty: number;
+
+  scrapQty: number;
+
+  runningStatus: RunningStatus;
+
+  startTime: string;
+
+  endTime: string;
+
   operator: string;
-  planId?: string;
-  productId: string;
-  productName: string;
-  produced: number;
-  accepted: number;
-  rejected: number;
-  rework: number;
-  scrap: number;
-  productionTime: number; // in minutes
-  timestamp: Date;
-  shift: 'A' | 'B' | 'C';
-  status: 'running' | 'completed' | 'paused' | 'stopped';
-  notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
-export interface CreateProductionLogDto {
-  machineId: string;
-  operator: string;
-  planId?: string;
-  productId: string;
-  produced: number;
-  accepted: number;
-  rejected: number;
-  rework: number;
-  scrap: number;
-  productionTime: number;
-  shift: 'A' | 'B' | 'C';
-  notes?: string;
-}
+  shift: string;
 
-export interface ProductionLogFilters {
-  machineId?: string;
-  operator?: string;
-  shift?: 'A' | 'B' | 'C';
-  dateFrom?: Date;
-  dateTo?: Date;
-  status?: string;
-}
-
-export interface ProductionLogStats {
-  totalProduced: number;
-  totalAccepted: number;
-  totalRejected: number;
-  totalRework: number;
-  totalScrap: number;
-  acceptanceRate: number;
-  rejectionRate: number;
-  efficiency: number;
-  activeMachines: number;
-  totalOperators: number;
+  remarks?: string;
 }

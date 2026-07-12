@@ -1,68 +1,41 @@
 import {
-  SearchBox,
-  DateRangePicker,
-  ToolbarButton,
-  ViewSwitcher,
-} from "@components/common/Toolbar";
-
-import {
-  Filter,
-  Plus,
-  ArrowUpDown,
-  Wrench,
-} from "lucide-react";
+  FunnelIcon,
+  ArrowsUpDownIcon,
+  WrenchScrewdriverIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
 
 export default function PlanningToolbar() {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+    <div className="flex items-center gap-3">
 
-      <div className="flex flex-wrap items-center justify-between gap-5">
+      <button className="h-10 rounded-lg border border-[#D0D5DD] bg-white px-4 text-sm font-medium text-[#344054] hover:bg-gray-50">
+        <span className="flex items-center gap-2">
+          <FunnelIcon className="w-4 h-4" />
+          Filters
+        </span>
+      </button>
 
-        {/* Left */}
+      <button className="h-10 rounded-lg border border-[#D0D5DD] bg-white px-4 text-sm font-medium text-[#344054] hover:bg-gray-50">
+        <span className="flex items-center gap-2">
+          <ArrowsUpDownIcon className="w-4 h-4" />
+          Re-order
+        </span>
+      </button>
 
-        <div className="flex flex-wrap items-center gap-4">
+      <button className="h-10 rounded-lg bg-[#14B86A] px-5 text-sm font-semibold text-white hover:bg-[#11A45F]">
+        <span className="flex items-center gap-2">
+          <WrenchScrewdriverIcon className="w-4 h-4" />
+          Equipment Change
+        </span>
+      </button>
 
-          <SearchBox placeholder="Search plan, part, machine..." />
-
-          <DateRangePicker />
-
-        </div>
-
-        {/* Right */}
-
-        <div className="flex flex-wrap items-center gap-3">
-
-          <ToolbarButton
-            icon={<Filter size={16} />}
-          >
-            Filters
-          </ToolbarButton>
-
-          <ToolbarButton
-            icon={<ArrowUpDown size={16} />}
-          >
-            Re-order
-          </ToolbarButton>
-
-          <ToolbarButton
-            variant="secondary"
-            icon={<Wrench size={16} />}
-          >
-            Equipment Change
-          </ToolbarButton>
-
-          <ToolbarButton
-            variant="primary"
-            icon={<Plus size={16} />}
-          >
-            Add New Plan
-          </ToolbarButton>
-
-          <ViewSwitcher />
-
-        </div>
-
-      </div>
+      <button className="h-10 rounded-lg bg-[#3559B7] px-5 text-sm font-semibold text-white hover:bg-[#27489B]">
+        <span className="flex items-center gap-2">
+          <PlusIcon className="w-4 h-4" />
+          Add New Plan
+        </span>
+      </button>
 
     </div>
   );

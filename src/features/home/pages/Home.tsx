@@ -1,108 +1,99 @@
-import KPISection from "../components/KPISection";
+import { PageLayout } from "@components/layout/PageLayout";
+import OEEGauge from "@components/dashboard/charts/OEEGauge";
+import ProductionBarChart from "@components/dashboard/charts/ProductionBarChart";
+import DowntimeChart from "@components/dashboard/charts/DowntimeChart";
+import OEEKPIs from "@components/dashboard/charts/OEEKPIs";
+import AvailabilityChart from "@components/dashboard/charts/AvailabilityChart";
+import MachineCard from "@components/dashboard/cards/MachineCard";
 
-import OEEChart from "../components/OEEChart";
-import ShiftSummary from "../components/ShiftSummary";
+// Mock data
+const mockMachines = Array.from({ length: 24 }, (_, i) => ({
+  id: `HT${28 + i}`,
+  status: ["Running", "Setup", "Offline", "Running", "Running"][
+    i % 5
+  ] as "Running" | "Setup" | "Offline",
 
-import ProductionOverviewChart from "../components/ProductionOverviewChart";
-import ProductionTrendChart from "../components/ProductionTrendChart";
+  operator: ["John D", "Sarah", "Mike", "Emma", "James"][i % 5],
 
-import MachineStatus from "../components/MachineStatus";
-import MachineErrors from "../components/MachineErrors";
+  part: `Widget ${String.fromCharCode(65 + (i % 5))}`,
 
-import QualitySummary from "../components/QualitySummary";
-import AvailabilityCard from "../components/AvailabilityCard";
+  mould: `M-${100 + i}`,
 
-import ProductionByHour from "../components/ProductionByHour";
-import DowntimeTrend from "../components/DowntimeTrend";
+  cycle: 24 + (i % 6),
 
-import UtilizationCard from "../components/UtilizationCard";
-import DowntimeSummary from "../components/DowntimeSummary";
+  shift: i < 12 ? "A" : "B",
+
+  target: 160,
+
+  produced: 130 + (i % 20),
+
+  rejected: i % 5,
+
+  availability: 90 + (i % 8),
+
+  performance: 80 + (i % 12),
+
+  quality: 98,
+
+  oee: 75 + (i % 18),
+}));
 
 export default function Home() {
   return (
-    <div className="space-y-7">
+    <PageLayout
+  title="Shop Floor Dashboard"
+  subtitle="Today's Production"
+  equipment="All Machines"
+>
 
-      {/* KPI */}
-      <KPISection />
+      {/* KPI Cards */}
 
-      {/* OEE + Shift */}
-      <section className="grid grid-cols-12 gap-6 items-stretch">
+      <div className="mb-6">
+        <OEEKPIs />
+      </div>
 
-        <div className="col-span-8">
-          <OEEChart />
+      {/* Top Charts */}
+
+      <div className="grid grid-cols-12 gap-5 mb-6">
+
+        <div className="col-span-12 xl:col-span-3">
+          <OEEGauge
+            value={38.42}
+            title="Shift OEE"
+          />
         </div>
 
-        <div className="col-span-4">
-          <ShiftSummary />
+        <div className="col-span-12 xl:col-span-6">
+          <ProductionBarChart />
         </div>
 
-      </section>
-
-      {/* Production */}
-      <section className="grid grid-cols-12 gap-6 items-stretch">
-
-        <div className="col-span-8">
-          <ProductionOverviewChart />
+        <div className="col-span-12 xl:col-span-3">
+          <DowntimeChart />
         </div>
 
-        <div className="col-span-4">
-          <ProductionTrendChart />
-        </div>
+      </div>
 
-      </section>
+      {/* Availability */}
 
-      {/* Machines */}
-      <section className="grid grid-cols-12 gap-6 items-stretch">
+      <div className="mb-6">
+        <AvailabilityChart />
+      </div>
 
-        <div className="col-span-8">
-          <MachineStatus />
-        </div>
+      {/* Machine Dashboard */}
 
-        <div className="col-span-4">
-          <MachineErrors />
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
 
-      </section>
+        {mockMachines.map((machine) => (
 
-      {/* Quality */}
-      <section className="grid grid-cols-12 gap-6 items-stretch">
+          <MachineCard
+            key={machine.id}
+            machine={machine}
+          />
 
-        <div className="col-span-6">
-          <QualitySummary />
-        </div>
+        ))}
 
-        <div className="col-span-6">
-          <AvailabilityCard />
-        </div>
+      </div>
 
-      </section>
-
-      {/* Hourly */}
-      <section className="grid grid-cols-12 gap-6 items-stretch">
-
-        <div className="col-span-8">
-          <ProductionByHour />
-        </div>
-
-        <div className="col-span-4">
-          <DowntimeTrend />
-        </div>
-
-      </section>
-
-      {/* Utilization */}
-      <section className="grid grid-cols-12 gap-6 items-stretch">
-
-        <div className="col-span-8">
-          <UtilizationCard />
-        </div>
-
-        <div className="col-span-4">
-          <DowntimeSummary />
-        </div>
-
-      </section>
-
-    </div>
+    </PageLayout>
   );
 }

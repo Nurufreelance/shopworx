@@ -1,30 +1,28 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { 
-  ColDef, 
-  GridOptions,
-  ModuleRegistry,
-} from 'ag-grid-community';
+import { ColDef, GridOptions, ModuleRegistry, themeQuartz } from 'ag-grid-community';
 import { 
   ClientSideRowModelModule,
-  FilterModule,
-  SortModule,
-  PaginationModule,
-  RowSelectionModule,
+  TextFilterModule,
+  NumberFilterModule,
+  DateFilterModule,
 } from 'ag-grid-community';
-import { cn } from '@utils/cn';
+import { 
+  PaginationModule,
+} from 'ag-grid-enterprise';
 
-// Register AG Grid modules
+// Register modules
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
-  FilterModule,
-  SortModule,
+  TextFilterModule,
+  NumberFilterModule,
+  DateFilterModule,
   PaginationModule,
-  RowSelectionModule,
 ]);
 
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+// REMOVE these CSS imports (they cause the conflict):
+// import 'ag-grid-community/styles/ag-grid.css';
+// import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 interface DataGridProps<T = any> {
   data: T[];
@@ -38,6 +36,7 @@ interface DataGridProps<T = any> {
   onCellValueChanged?: (params: any) => void;
   rowSelection?: 'single' | 'multiple';
   gridOptions?: GridOptions;
+  exportable?: boolean;
 }
 
 export const DataGrid = ({
@@ -52,6 +51,7 @@ export const DataGrid = ({
   onCellValueChanged,
   rowSelection,
   gridOptions = {},
+  exportable = false,
 }: DataGridProps) => {
   const [gridApi, setGridApi] = useState<any>(null);
 
@@ -59,7 +59,6 @@ export const DataGrid = ({
     sortable: true,
     resizable: true,
     filter: true,
-    floatingFilter: true,
     minWidth: 80,
     flex: 1,
   }), []);
@@ -74,32 +73,54 @@ export const DataGrid = ({
     }
   };
 
-  const onCellValueChangedHandler = (params: any) => {
-    if (onCellValueChanged) {
-      onCellValueChanged(params);
+  const exportData = () => {
+    if (gridApi) {
+      const csv = gridApi.getDataAsCsv();
+      if (csv) {
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'export.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
     }
   };
 
   return (
-    <div className={cn(
-      "ag-theme-alpine border border-[#E5E7EB] rounded",
-      className
-    )}>
-      <AgGridReact
-        rowData={data}
-        columnDefs={columns}
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-        onRowClicked={onRowClicked}
-        onCellValueChanged={onCellValueChangedHandler}
-        rowSelection={rowSelection}
-        pagination={pagination}
-        paginationPageSize={pageSize}
-        loading={loading}
-        style={{ height: typeof height === 'number' ? height : height }}
-        animateRows={true}
-        {...gridOptions}
-      />
+    <div className="space-y-2">
+      {exportable && gridApi && (
+        <div className="flex justify-end">
+          <button
+            onClick={exportData}
+            className="px-3 py-1 text-[11px] text-[#6B7280] border border-[#E5E7EB] rounded-[8px] hover:bg-gray-50 transition-colors"
+          >
+            Export CSV
+          </button>
+        </div>
+      )}
+      
+      <div className={className}>
+        <AgGridReact
+          rowData={data}
+          columnDefs={columns}
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+          onRowClicked={onRowClicked}
+          onCellValueChanged={onCellValueChanged}
+          rowSelection={rowSelection}
+          pagination={pagination}
+          paginationPageSize={pageSize}
+          loading={loading}
+          style={{ height: typeof height === 'number' ? height : height }}
+          animateRows={true}
+          theme={themeQuartz}  // ← This fixes the AG Grid error!
+          {...gridOptions}
+        />
+      </div>
     </div>
   );
 };

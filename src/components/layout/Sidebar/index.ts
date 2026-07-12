@@ -1,1 +1,2 @@
-export { default } from "./Sidebar";
+export { Sidebar } from './Sidebar';
+export { navigation } from './navigation';
