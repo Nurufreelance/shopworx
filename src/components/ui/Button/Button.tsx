@@ -1,5 +1,6 @@
 ﻿import { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '@utils/cn';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'outline';
@@ -15,6 +16,7 @@ export const Button = ({
   className,
   isLoading = false,
   disabled,
+  tooltip,
   ...props
 }: ButtonProps) => {
   const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
@@ -59,4 +61,15 @@ export const Button = ({
       )}
     </button>
   );
+
+    if (tooltip) {
+    return (
+      <Tooltip content={tooltip} position="top" delay={200}>
+        {button}
+      </Tooltip>
+    );
+  }
+
+  return button;
 };
+

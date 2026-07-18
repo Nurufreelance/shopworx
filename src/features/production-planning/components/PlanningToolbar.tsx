@@ -5,10 +5,13 @@ import {
   PlusIcon,
 } from "@heroicons/react/24/outline";
 
-export default function PlanningToolbar() {
+interface PlanningToolbarProps {
+  onRefresh: () => void;
+}
+
+const PlanningToolbar = ({ onRefresh }: PlanningToolbarProps) => {
   return (
     <div className="flex items-center gap-3">
-
       <button className="h-10 rounded-lg border border-[#D0D5DD] bg-white px-4 text-sm font-medium text-[#344054] hover:bg-gray-50">
         <span className="flex items-center gap-2">
           <FunnelIcon className="w-4 h-4" />
@@ -36,7 +39,8 @@ export default function PlanningToolbar() {
           Add New Plan
         </span>
       </button>
-
     </div>
   );
-}
+};
+
+export default PlanningToolbar;

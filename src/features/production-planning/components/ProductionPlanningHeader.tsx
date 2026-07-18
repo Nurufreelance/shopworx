@@ -1,7 +1,6 @@
 import PlanningToolbar from "./PlanningToolbar";
 
-export default function ProductionPlanningHeader() {
-  const today = new Date();
+export const PlanningToolbar today = new Date = () => {
 
   const date = today.toLocaleDateString("en-GB", {
     weekday: "short",

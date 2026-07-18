@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { router } from './routes';
 import { theme } from './theme';
+import { MobileProvider } from '@context/MobileContext';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -19,7 +20,7 @@ const queryClient = new QueryClient({
 
 const AppLoader = () => (
   <div className="flex items-center justify-center h-screen bg-[#F6F8FB]">
-    <div className="w-10 h-10 border-4 border-[#2F6BFF] border-t-transparent rounded-full animate-spin" />
+    <div className="w-10 h-10 border-4 border-[#F97316] border-t-transparent rounded-full animate-spin" />
   </div>
 );
 
@@ -27,36 +28,38 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <Suspense fallback={<AppLoader />}>
-          <RouterProvider 
-            router={router} 
-            future={{
-              v7_startTransition: true,
+        <MobileProvider>
+          <Suspense fallback={<AppLoader />}>
+            <RouterProvider 
+              router={router} 
+              future={{
+                v7_startTransition: true,
+              }}
+            />
+          </Suspense>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#31B86A',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#EF5350',
+                  secondary: '#fff',
+                },
+              },
             }}
           />
-        </Suspense>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#363636',
-              color: '#fff',
-            },
-            success: {
-              iconTheme: {
-                primary: '#31B86A',
-                secondary: '#fff',
-              },
-            },
-            error: {
-              iconTheme: {
-                primary: '#EF5350',
-                secondary: '#fff',
-              },
-            },
-          }}
-        />
+        </MobileProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

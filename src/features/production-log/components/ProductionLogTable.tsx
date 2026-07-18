@@ -1,111 +1,59 @@
-import { ProductionLog } from "../types/production-log.types";
-import ProductionLogRow from "./ProductionLogRow";
+import { DataGrid } from '@components/ui/DataGrid/DataGrid';
+import { ColDef } from 'ag-grid-community';
+import { ShiftGroup } from './ShiftGroup';
 
-interface Props {
-  logs: ProductionLog[];
+const columnDefs: ColDef[] = [
+  { field: 'machine', headerName: 'Machine', width: 140 },
+  { field: 'part', headerName: 'Part', flex: 1 },
+  { field: 'color', headerName: 'Color', width: 100 },
+  { field: 'startTime', headerName: 'Production Start', width: 140 },
+  { field: 'endTime', headerName: 'Production End', width: 140 },
+  { field: 'produced', headerName: 'Produced', width: 100 },
+  { field: 'accepted', headerName: 'Accepted', width: 100 },
+  { field: 'rejected', headerName: 'Rejected', width: 100 },
+  { field: 'rework', headerName: 'Rework', width: 100 },
+  { field: 'scrap', headerName: 'Scrap', width: 100 },
+  { field: 'actions', headerName: 'Actions', width: 120 },
+];
+
+interface ProductionLogTableProps {
+  shift1Data: any[];
+  shift2Data: any[];
+  loading?: boolean;
 }
 
-export default function ProductionLogTable({
-  logs,
-}: Props) {
+export const ProductionLogTable = ({ shift1Data, shift2Data, loading }: ProductionLogTableProps) => {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64 text-[#6B7280]">
+        Fetching production records...
+      </div>
+    );
+  }
+
   return (
-    <div className="overflow-hidden rounded-xl border border-[#D9DEE7] bg-white shadow-sm">
-
-      <div className="overflow-x-auto">
-
-        <table className="min-w-full border-collapse">
-
-          <thead className="bg-[#F7F9FC]">
-
-            <tr className="border-b border-[#D9DEE7]">
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Machine
-              </th>
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Part
-              </th>
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Colour
-              </th>
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Status
-              </th>
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Mode
-              </th>
-
-              <th className="px-4 py-4 text-right text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Produced
-              </th>
-
-              <th className="px-4 py-4 text-right text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Accepted
-              </th>
-
-              <th className="px-4 py-4 text-right text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Rejected
-              </th>
-
-              <th className="px-4 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Scrap
-              </th>
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Running
-              </th>
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Start
-              </th>
-
-              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                End
-              </th>
-
-              <th className="px-4 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
-                Actions
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {logs.map((log) => (
-              <ProductionLogRow
-                key={log.id}
-                log={log}
-              />
-            ))}
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-      <div className="flex items-center justify-between border-t border-[#ECEFF4] bg-[#FAFBFC] px-6 py-4">
-
-        <span className="text-sm text-[#6B7280]">
-          Showing{" "}
-          <span className="font-semibold text-[#2F3640]">
-            {logs.length}
-          </span>{" "}
-          production records
-        </span>
-
-        <span className="text-sm font-medium text-[#3559B7]">
-          ShopWorx Production Log
-        </span>
-
-      </div>
-
+    <div>
+      {shift1Data.length > 0 && (
+        <ShiftGroup shift="Shift1">
+          <DataGrid
+            data={shift1Data}
+            columns={columnDefs}
+            height={300}
+            pagination={false}
+          />
+        </ShiftGroup>
+      )}
+      
+      {shift2Data.length > 0 && (
+        <ShiftGroup shift="Shift2">
+          <DataGrid
+            data={shift2Data}
+            columns={columnDefs}
+            height={300}
+            pagination={false}
+          />
+        </ShiftGroup>
+      )}
     </div>
   );
-}
+};

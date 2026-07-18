@@ -5,21 +5,30 @@ import {
   ClockIcon,
   GlobeAltIcon,
   ChartBarIcon,
+  ShieldCheckIcon,
+  BoltIcon,
   Squares2X2Icon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 
 export const navigation = [
-  // ================= Dashboard =================
+  // ================= DASHBOARD =================
   {
     id: "home",
     label: "Home",
     icon: HomeIcon,
-    path: "/",
+    path: "/",                    // ← Navigates to root
+    group: "dashboard",
+  },
+  {
+    id: "live-shopfloor",
+    label: "Live Shopfloor",
+    icon: GlobeAltIcon,
+    path: "/live-shopfloor",      // ← Navigates to live shopfloor
     group: "dashboard",
   },
 
-  // ================= Production =================
+  // ================= PRODUCTION =================
   {
     id: "production-planning",
     label: "Production Planning",
@@ -27,15 +36,6 @@ export const navigation = [
     path: "/production-planning",
     group: "production",
   },
-
-  {
-    id: "production-order",
-    label: "Production Order",
-    icon: ClipboardDocumentListIcon,
-    path: "/production-order",
-    group: "production",
-  },
-
   {
     id: "production-log",
     label: "Production Log",
@@ -43,46 +43,21 @@ export const navigation = [
     path: "/production-log",
     group: "production",
   },
-
   {
     id: "downtime-log",
     label: "Downtime Log",
     icon: ClockIcon,
-    path: "/downtime-log",
+    path: "/downtime-log",        // ← Navigates to downtime log
     group: "production",
   },
 
+  // ================= REPORTS =================
   {
-    id: "live-shopfloor",
-    label: "Live Shopfloor",
-    icon: GlobeAltIcon,
-    path: "/live-shopfloor",
-    group: "production",
-  },
-
-  // ================= Reports =================
-  {
-    id: "reports",
-    label: "Reports",
+    id: "reports-production",
+    label: "Production Report",
     icon: ChartBarIcon,
-    path: "/reports",
+    path: "/reports/production",
     group: "reports",
   },
-
-  // ================= System =================
-  {
-    id: "master-data",
-    label: "Master Data",
-    icon: Squares2X2Icon,
-    path: "/master-data",
-    group: "system",
-  },
-
-  {
-    id: "settings",
-    label: "Settings",
-    icon: Cog6ToothIcon,
-    path: "/settings",
-    group: "system",
-  },
+  // ... etc
 ];

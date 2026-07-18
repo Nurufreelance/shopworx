@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-  export interface MobileContextType {
+
+interface MobileContextType {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
@@ -24,6 +25,7 @@ export const MobileProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setIsTablet(width >= 768 && width < 1024);
       setIsDesktop(width >= 1024);
       
+      // Auto-close sidebar on mobile
       if (width >= 1024) {
         setSidebarOpen(false);
       }

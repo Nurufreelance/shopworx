@@ -13,8 +13,8 @@ export const HamburgerMenu = ({ className }: HamburgerMenuProps) => {
       onClick={toggleSidebar}
       className={cn(
         "relative w-10 h-10 flex items-center justify-center rounded-lg",
-        "hover:bg-gray-800/50 transition-colors",
-        "focus:outline-none focus:ring-2 focus:ring-primary-500",
+        "hover:bg-[#2A2D35] transition-colors",
+        "focus:outline-none focus:ring-2 focus:ring-[#F97316]",
         className
       )}
       aria-label="Toggle menu"

@@ -6,6 +6,7 @@ import {
   TextFilterModule,
   NumberFilterModule,
   DateFilterModule,
+  CellStyleModule, // ✅ ADD THIS
 } from 'ag-grid-community';
 import { 
   PaginationModule,
@@ -17,12 +18,9 @@ ModuleRegistry.registerModules([
   TextFilterModule,
   NumberFilterModule,
   DateFilterModule,
+  CellStyleModule, // ✅ ADD THIS
   PaginationModule,
 ]);
-
-// REMOVE these CSS imports (they cause the conflict):
-// import 'ag-grid-community/styles/ag-grid.css';
-// import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 interface DataGridProps<T = any> {
   data: T[];
@@ -117,7 +115,7 @@ export const DataGrid = ({
           loading={loading}
           style={{ height: typeof height === 'number' ? height : height }}
           animateRows={true}
-          theme={themeQuartz}  // ← This fixes the AG Grid error!
+          theme={themeQuartz}
           {...gridOptions}
         />
       </div>
