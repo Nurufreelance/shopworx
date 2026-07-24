@@ -1,91 +1,76 @@
-﻿import { useState } from 'react';
+﻿// ==================== SHIFT DOWNTIME ====================
+// src/features/dashboard/components/ShiftDowntime.tsx
+
+import { useState } from 'react';
 
 interface ShiftDowntimeProps {
-  shift?: 'A' | 'B' | 'C';
+  shift?: string;
 }
 
-export const ShiftDowntime = ({ shift = 'A' }: ShiftDowntimeProps) => {
-  const [selectedShift, setSelectedShift] = useState<'A' | 'B' | 'C'>(shift);
+interface DowntimeRow {
+  machine: string;
+  startTime: string;
+  endTime: string;
+  reason: string;
+  isPlanned: string;
+}
 
-  // Mock data - replace with real data later
-  const records = [
-    { machine: 'HT-29-HT-270', startTime: '07:25:54', endTime: '07:25:58', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:25:32', endTime: '07:25:35', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:25:10', endTime: '07:25:13', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:24:47', endTime: '07:24:51', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:24:25', endTime: '07:24:28', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:24:03', endTime: '07:24:06', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:23:40', endTime: '07:23:44', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:23:18', endTime: '07:23:21', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:22:56', endTime: '07:22:59', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:22:34', endTime: '07:22:37', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:22:11', endTime: '07:22:14', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:21:49', endTime: '07:21:52', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:21:27', endTime: '07:21:30', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:21:05', endTime: '07:21:08', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:20:42', endTime: '07:20:45', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:20:20', endTime: '07:20:23', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:19:58', endTime: '07:20:01', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:19:35', endTime: '07:19:39', reason: '', isPlanned: '' },
-    { machine: 'HT-29-HT-270', startTime: '07:19:13', endTime: '07:19:16', reason: '', isPlanned: '' },
-  ];
+const downtimeData: DowntimeRow[] = [
+  { machine: 'LI-44-HXM-830', startTime: '10:53:17', endTime: '10:53:30', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:52:35', endTime: '10:52:45', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:51:53', endTime: '10:52:04', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:49:40', endTime: '10:49:54', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:48:57', endTime: '10:49:09', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:47:34', endTime: '10:47:41', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:46:53', endTime: '10:47:02', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:45:36', endTime: '10:46:21', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:43:55', endTime: '10:45:04', reason: '', isPlanned: '' },
+  { machine: 'LI-44-HXM-830', startTime: '10:41:18', endTime: '10:43:24', reason: '', isPlanned: '' },
+];
 
+export function ShiftDowntime({ shift = 'Shift2, 2026-07-20' }: ShiftDowntimeProps) {
   return (
-    <div className="shopworx-card">
+    <div className="bg-white rounded-[8px] border border-[#E5E7EB] shadow-sm p-4">
+      {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-[13px] font-medium text-[#1F2937]">Shift Downtime</h3>
-        <div className="flex gap-1">
-          {(['A', 'B', 'C'] as const).map((s) => (
-            <button
-              key={s}
-              onClick={() => setSelectedShift(s)}
-              className={`px-2.5 py-0.5 text-[10px] font-medium rounded transition-colors ${
-                selectedShift === s
-                  ? 'bg-[#2F6BFF] text-white'
-                  : 'text-[#6B7280] hover:bg-gray-100'
-              }`}
-            >
-              {s}
-            </button>
-          ))}
+        <h3 className="text-[13px] font-medium text-[#1F2937]">Shift downtime</h3>
+        <div className="flex items-center gap-2">
+          <svg className="w-4 h-4 text-[#6B7280] cursor-pointer hover:text-[#1F2937]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
         </div>
       </div>
 
-      <div className="text-[13px] font-medium text-[#3048A8] mb-2">
-        HT-29-HT-270
+      {/* Machine Title - Blue like production */}
+      <div className="text-[16px] font-medium text-[#2F6BFF] mb-3">
+        LI-44-HXM-830
       </div>
 
+      {/* Downtime Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-[10px]">
+        <table className="w-full text-[10px] border-collapse">
           <thead>
             <tr className="border-b border-[#E5E7EB]">
-              <th className="text-left py-1.5 text-[#6B7280] font-medium">Machine</th>
-              <th className="text-left py-1.5 text-[#6B7280] font-medium">Start</th>
-              <th className="text-left py-1.5 text-[#6B7280] font-medium">End</th>
-              <th className="text-left py-1.5 text-[#6B7280] font-medium">Reason</th>
-              <th className="text-left py-1.5 text-[#6B7280] font-medium">Planned</th>
+              <th className="text-left py-1.5 pr-3 text-[#6B7280] font-medium">Machine</th>
+              <th className="text-left py-1.5 pr-3 text-[#6B7280] font-medium">Downtime start</th>
+              <th className="text-left py-1.5 pr-3 text-[#6B7280] font-medium">Downtime end</th>
+              <th className="text-left py-1.5 pr-3 text-[#6B7280] font-medium">Reason</th>
+              <th className="text-left py-1.5 pr-3 text-[#6B7280] font-medium">Is planned</th>
             </tr>
           </thead>
           <tbody>
-            {records.map((record, index) => (
-              <tr key={index} className="border-b border-[#F6F8FB] hover:bg-[#F6F8FB] transition-colors">
-                <td className="py-1 text-[#1F2937] font-medium">{record.machine}</td>
-                <td className="py-1 text-[#6B7280]">{record.startTime}</td>
-                <td className="py-1 text-[#6B7280]">{record.endTime}</td>
-                <td className="py-1 text-[#6B7280]">{record.reason || '-'}</td>
-                <td className="py-1 text-[#6B7280]">{record.isPlanned || '-'}</td>
+            {downtimeData.map((row, index) => (
+              <tr key={index} className="border-b border-[#F6F8FB] hover:bg-[#F6F8FB] transition-colors duration-150">
+                <td className="py-1.5 pr-3 text-[#1F2937] font-medium">{row.machine}</td>
+                <td className="py-1.5 pr-3 text-[#6B7280]">{row.startTime}</td>
+                <td className="py-1.5 pr-3 text-[#6B7280]">{row.endTime}</td>
+                <td className="py-1.5 pr-3 text-[#6B7280]">{row.reason || '-'}</td>
+                <td className="py-1.5 pr-3 text-[#6B7280]">{row.isPlanned || '-'}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      <div className="mt-3 pt-2 border-t border-[#E5E7EB]">
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-[#6B7280]">Shift summary</span>
-          <span className="text-[11px] font-medium text-[#1F2937]">Shift1, 2026-07-14</span>
-        </div>
-      </div>
     </div>
   );
-};
+}

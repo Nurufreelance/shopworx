@@ -1,3 +1,5 @@
+// src/context/MobileContext.tsx
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface MobileContextType {
@@ -25,8 +27,10 @@ export const MobileProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setIsTablet(width >= 768 && width < 1024);
       setIsDesktop(width >= 1024);
       
-      // Auto-close sidebar on mobile
+      // Auto-open sidebar on desktop, auto-close on mobile/tablet
       if (width >= 1024) {
+        setSidebarOpen(true); // ✅ Changed: open on desktop by default
+      } else {
         setSidebarOpen(false);
       }
     };
