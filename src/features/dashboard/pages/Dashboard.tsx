@@ -1,43 +1,53 @@
-﻿import { useState } from 'react';
+﻿// src/features/dashboard/pages/Dashboard.tsx
+
+import { useState } from 'react';
+import { DashboardHeader } from '../components/DashboardHeader';
 import { ShiftOEE } from '../components/ShiftOEE';
 import { ShiftProduction } from '../components/ShiftProduction';
 import { ShiftDowntime } from '../components/ShiftDowntime';
 
-export default function Dashboard() {
-  const [selectedShift, setSelectedShift] = useState<'A' | 'B' | 'C'>('A');
+const Dashboard = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRefresh = () => {
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 1000);
+  };
 
   return (
-    <div className="p-4 bg-white min-h-screen">
-      {/* Shift Selector */}
-      <div className="flex gap-2 mb-4">
-        {(['A', 'B', 'C'] as const).map((shift) => (
-          <button
-            key={shift}
-            onClick={() => setSelectedShift(shift)}
-            className={`px-4 py-1.5 text-[11px] font-medium rounded transition-colors ${
-              selectedShift === shift
-                ? 'bg-[#2F6BFF] text-white'
-                : 'bg-[#F6F8FB] text-[#6B7280] hover:bg-gray-200'
-            }`}
-          >
-            Shift {shift}
-          </button>
-        ))}
-      </div>
+    <div className="flex flex-col h-full bg-[#F6F7F9]">
+      {/* Sticky Header */}
+      <DashboardHeader
+        shift="Shift1"
+        date="2026-07-24"
+        onRefresh={handleRefresh}
+        onSearch={(query) => console.log('Search:', query)}
+        onSync={() => console.log('Sync')}
+        onHelp={() => console.log('Help')}
+        onAvatarClick={() => console.log('Avatar clicked')}
+      />
 
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* LEFT COLUMN - Shift OEE */}
-        <div className="p-1">
-          <ShiftOEE shift={selectedShift} />
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* OEE - 35% width */}
+          <div className="lg:col-span-4">
+            <ShiftOEE shift="Shift1, 2026-07-24" />
+          </div>
+
+          {/* Production - 65% width */}
+          <div className="lg:col-span-8">
+            <ShiftProduction shift="Shift1, 2026-07-24" />
+          </div>
         </div>
 
-        {/* RIGHT COLUMN - Shift Production + Shift Downtime */}
-        <div className="p-1 space-y-4">
-          <ShiftProduction shift={selectedShift} />
-          <ShiftDowntime shift={selectedShift} />
+        {/* Downtime - Full width */}
+        <div className="mt-4">
+          <ShiftDowntime shift="Shift1, 2026-07-24" />
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Dashboard;

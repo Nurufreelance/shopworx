@@ -1,22 +1,44 @@
 ﻿// src/routes/index.tsx
 
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { DashboardLayout } from '@components/layout/DashboardLayout';
 
 // Lazy load pages
 const Login = lazy(() => import('@features/auth/pages/Login'));
-// ✅ Dashboard is the main page (from dashboard folder)
 const Dashboard = lazy(() => import('@features/dashboard/pages/Dashboard'));
+
+// Production
 const ProductionPlanning = lazy(() => import('@features/production-planning/pages/ProductionPlanning'));
-const ProductionLog = lazy(() => import('@features/production-log/pages/ProductionLog'));
+
+// ✅ Fix: Use the direct path to the page file
+const ProductionLog = lazy(() => import('@features/production-log/pages/ProductionLogPage'));
+
+// Downtime
 const DowntimeLog = lazy(() => import('@features/downtime-log/pages/DowntimeLog'));
+
+// Dashboards
 const LiveShopfloor = lazy(() => import('@features/live-shopfloor/pages/LiveShopfloor'));
+
+// Reports
 const ProductionReport = lazy(() => import('@features/reports/pages/ProductionReport'));
 const DowntimeReport = lazy(() => import('@features/reports/pages/DowntimeReport'));
 const QualityReport = lazy(() => import('@features/reports/pages/QualityReport'));
 const PerformanceReport = lazy(() => import('@features/reports/pages/PerformanceReport'));
-const MasterData = lazy(() => import('@features/master-data/pages/MasterData'));
+
+// Master Data
+const MasterDataLayout = lazy(() => import('@features/master-data/MasterDataLayout'));
+
+const ColorPage = lazy(() => import('@features/master-data/pages/ColorPage'));
+const MachinePage = lazy(() => import('@features/master-data/pages/MachinePage'));
+const MoldPage = lazy(() => import('@features/master-data/pages/MoldPage'));
+const PartPage = lazy(() => import('@features/master-data/pages/PartPage'));
+const PartMatrixPage = lazy(() => import('@features/master-data/pages/PartMatrixPage'));
+const OperatorPage = lazy(() => import('@features/master-data/pages/OperatorPage'));
+const DowntimePage = lazy(() => import('@features/master-data/pages/DowntimePage'));
+const RejectionPage = lazy(() => import('@features/master-data/pages/RejectionPage'));
+const ReworkPage = lazy(() => import('@features/master-data/pages/ReworkPage'));
+const ScrapPage = lazy(() => import('@features/master-data/pages/ScrapPage'));
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-64">
@@ -34,15 +56,17 @@ export const router = createBrowserRouter(
       path: '/',
       element: <DashboardLayout />,
       children: [
-        // ✅ Dashboard is the default landing page
+        // Dashboard
         { index: true, element: <Suspense fallback={<PageLoader />}><Dashboard /></Suspense> },
         { path: 'home', element: <Suspense fallback={<PageLoader />}><Dashboard /></Suspense> },
         { path: 'dashboard', element: <Suspense fallback={<PageLoader />}><Dashboard /></Suspense> },
         
-        // Main navigation
+        // Production
         { path: 'production-planning', element: <Suspense fallback={<PageLoader />}><ProductionPlanning /></Suspense> },
         { path: 'production-log', element: <Suspense fallback={<PageLoader />}><ProductionLog /></Suspense> },
         { path: 'downtime-log', element: <Suspense fallback={<PageLoader />}><DowntimeLog /></Suspense> },
+        
+        // Dashboards
         { path: 'live-shopfloor', element: <Suspense fallback={<PageLoader />}><LiveShopfloor /></Suspense> },
         
         // Reports
@@ -52,7 +76,29 @@ export const router = createBrowserRouter(
         { path: 'reports/performance', element: <Suspense fallback={<PageLoader />}><PerformanceReport /></Suspense> },
         
         // Master Data
-        { path: 'master-data', element: <Suspense fallback={<PageLoader />}><MasterData /></Suspense> },
+        {
+          path: 'master-data',
+          element: <Suspense fallback={<PageLoader />}><MasterDataLayout /></Suspense>,
+          children: [
+            { index: true, element: <Navigate to="/master-data/assets/colors" replace /> },
+            
+            // Reasons
+            { path: 'reasons/downtime', element: <Suspense fallback={<PageLoader />}><DowntimePage /></Suspense> },
+            { path: 'reasons/rejection', element: <Suspense fallback={<PageLoader />}><RejectionPage /></Suspense> },
+            { path: 'reasons/rework', element: <Suspense fallback={<PageLoader />}><ReworkPage /></Suspense> },
+            { path: 'reasons/scrap', element: <Suspense fallback={<PageLoader />}><ScrapPage /></Suspense> },
+            
+            // Assets
+            { path: 'assets/colors', element: <Suspense fallback={<PageLoader />}><ColorPage /></Suspense> },
+            { path: 'assets/machines', element: <Suspense fallback={<PageLoader />}><MachinePage /></Suspense> },
+            { path: 'assets/molds', element: <Suspense fallback={<PageLoader />}><MoldPage /></Suspense> },
+            { path: 'assets/parts', element: <Suspense fallback={<PageLoader />}><PartPage /></Suspense> },
+            { path: 'assets/part-matrix', element: <Suspense fallback={<PageLoader />}><PartMatrixPage /></Suspense> },
+            
+            // People
+            { path: 'people/operators', element: <Suspense fallback={<PageLoader />}><OperatorPage /></Suspense> },
+          ],
+        },
       ],
     },
   ],

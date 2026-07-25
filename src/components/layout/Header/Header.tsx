@@ -3,122 +3,88 @@
 import { useState } from 'react';
 import { 
   MagnifyingGlassIcon, 
-  BellIcon, 
-  UserCircleIcon,
-  MoonIcon,
-  SunIcon,
   QuestionMarkCircleIcon,
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
-import { HamburgerMenu } from '../HamburgerMenu';
+import { useLocation } from 'react-router-dom';
 import { useMobile } from '@context/MobileContext';
 import { cn } from '@utils/cn';
-import { Tooltip } from '@components/ui/Tooltip/Tooltip';
+
+// Pages that should NOT show the header
+const HIDDEN_HEADER_PAGES = ['/live-shopfloor'];
 
 export const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const { isMobile } = useMobile();
+  const location = useLocation();
+
+  // Hide header on Live Shopfloor
+  if (HIDDEN_HEADER_PAGES.includes(location.pathname)) {
+    return null;
+  }
+
+  // Get page title based on route
+  const getPageTitle = () => {
+    const path = location.pathname;
+    if (path === '/' || path === '/home' || path === '/dashboard') return 'Dashboard';
+    if (path.includes('production-planning')) return 'Production Planning';
+    if (path.includes('production-log')) return 'Production Log';
+    if (path.includes('downtime-log')) return 'Downtime Log';
+    if (path.includes('master-data')) return 'Master Data';
+    if (path.includes('reports/production')) return 'Production Report';
+    if (path.includes('reports/downtime')) return 'Downtime Report';
+    if (path.includes('reports/quality')) return 'Quality Report';
+    if (path.includes('reports/performance')) return 'Performance Report';
+    return '';
+  };
 
   return (
-    // CHANGE from dark to light header
-    <header className="bg-white border-b border-[#E5E7EB] px-3 sm:px-6 py-2 sm:py-3">
+    <header className="bg-white border-b border-[#E5E7EB] px-4 sm:px-6 py-3">
       <div className="flex items-center justify-between">
-        {/* Left: Hamburger + Title */}
-        <div className="flex items-center gap-3">
-          <HamburgerMenu />
-          {isMobile && (
-            <h1 className="text-lg font-bold text-[#1F2229]">ShopWorx</h1>
-          )}
+        {/* Left: Page Title */}
+        <div className="flex items-center">
+          <h1 className="text-[15px] font-semibold text-[#1F2937]">
+            {getPageTitle()}
+          </h1>
         </div>
 
-        {/* Search */}
-        <div className="flex-1 max-w-md hidden sm:block mx-4">
-          <Tooltip content="Search reports & insights" position="bottom" delay={300}>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                // CHANGE from dark to light
-                className="w-full pl-10 pr-4 py-1.5 bg-[#F6F8FB] border border-[#E5E7EB] rounded-lg text-[#1F2229] placeholder-gray-500 text-[13px] focus:ring-2 focus:ring-[#F97316] focus:border-transparent outline-none"
-              />
-              <MagnifyingGlassIcon className="absolute left-3 top-2 w-4 h-4 text-gray-400" />
-            </div>
-          </Tooltip>
-        </div>
+        {/* Right: Search + Icons */}
+        <div className="flex items-center gap-5">
+          {/* Search Bar - Pill shaped */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search reports & insights"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-[200px] sm:w-[300px] lg:w-[380px] h-10 pl-12 pr-4 bg-white border border-[#D1D5DB] rounded-full text-[14px] text-[#1F2937] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 transition-all duration-200"
+            />
+            <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#9CA3AF]" />
+          </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-1 sm:gap-3">
-          {/* Mobile Search Button */}
-          {isMobile && (
-            <Tooltip content="Search" position="bottom">
-              <button className="p-2 rounded-lg hover:bg-[#F6F8FB] transition-colors">
-                <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
-              </button>
-            </Tooltip>
-          )}
+          {/* Sync Icon */}
+          <button 
+            className="p-2 rounded-full hover:bg-[#F3F4F6] transition-all duration-150"
+            title="Sync data"
+          >
+            <ArrowPathIcon className="w-[18px] h-[18px] text-[#6B7280]" />
+          </button>
 
-          {/* Refresh Button */}
-          <Tooltip content="Refresh data" position="bottom">
-            <button className="p-2 rounded-lg hover:bg-[#F6F8FB] transition-colors">
-              <ArrowPathIcon className="w-5 h-5 text-gray-500" />
-            </button>
-          </Tooltip>
+          {/* Help Icon */}
+          <button 
+            className="p-2 rounded-full hover:bg-[#F3F4F6] transition-all duration-150"
+            title="Help & Documentation"
+          >
+            <QuestionMarkCircleIcon className="w-[18px] h-[18px] text-[#6B7280]" />
+          </button>
 
-          {/* Help Button */}
-          <Tooltip content="Help & Documentation" position="bottom">
-            <button className="p-2 rounded-lg hover:bg-[#F6F8FB] transition-colors">
-              <QuestionMarkCircleIcon className="w-5 h-5 text-gray-500" />
-            </button>
-          </Tooltip>
-
-          {/* Plant Selector */}
-          <Tooltip content="Select plant" position="bottom">
-            <select className="hidden sm:block px-2 py-1 bg-[#F6F8FB] border border-[#E5E7EB] rounded-lg text-sm text-[#1F2229] focus:ring-2 focus:ring-[#F97316] focus:border-transparent outline-none">
-              <option>Plant A</option>
-              <option>Plant B</option>
-            </select>
-          </Tooltip>
-
-          {/* Shift Selector */}
-          <Tooltip content="Select shift" position="bottom">
-            <select className="hidden sm:block px-2 py-1 bg-[#F6F8FB] border border-[#E5E7EB] rounded-lg text-sm text-[#1F2229] focus:ring-2 focus:ring-[#F97316] focus:border-transparent outline-none">
-              <option>Shift 1</option>
-              <option>Shift 2</option>
-            </select>
-          </Tooltip>
-
-          {/* Notifications */}
-          <Tooltip content="Notifications" position="bottom">
-            <button className="relative p-2 rounded-lg hover:bg-[#F6F8FB] transition-colors">
-              <BellIcon className="w-5 h-5 text-gray-500" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
-          </Tooltip>
-
-          {/* Dark Mode Toggle */}
-          <Tooltip content={isDarkMode ? "Switch to light mode" : "Switch to dark mode"} position="bottom">
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="hidden sm:block p-2 rounded-lg hover:bg-[#F6F8FB] transition-colors"
-            >
-              {isDarkMode ? (
-                <SunIcon className="w-5 h-5 text-gray-500" />
-              ) : (
-                <MoonIcon className="w-5 h-5 text-gray-500" />
-              )}
-            </button>
-          </Tooltip>
-
-          {/* User Avatar */}
-          <Tooltip content="User profile & settings" position="bottom">
-            <button className="flex items-center gap-2 p-1 rounded-lg hover:bg-[#F6F8FB] transition-colors">
-              <UserCircleIcon className="w-7 h-7 sm:w-8 sm:h-8 text-gray-500" />
-              <span className="hidden sm:block text-sm font-medium text-[#1F2229]">Admin</span>
-            </button>
-          </Tooltip>
+          {/* Avatar - Blue circle with smiley emoji */}
+          <button 
+            className="w-10 h-10 rounded-full bg-[#3450D8] flex items-center justify-center hover:brightness-95 transition-all duration-150 text-[20px]"
+            title="User profile"
+          >
+            😊
+          </button>
         </div>
       </div>
     </header>
