@@ -171,3 +171,31 @@
 .shopworx-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
+/* src/index.css - Add this */
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F3F4F6;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C7CCD6;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A8B0C0;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #C7CCD6 #F3F4F6;
+}

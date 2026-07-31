@@ -1,49 +1,107 @@
-﻿// src/features/dashboard/pages/Dashboard.tsx
+// src/features/dashboard/pages/Dashboard.tsx
 
-import { useState } from 'react';
+import React from 'react';
+import { useDashboard } from '../hooks/useDashboard';
 import { DashboardHeader } from '../components/DashboardHeader';
-import { ShiftOEE } from '../components/ShiftOEE';
+import { OEEDonut } from '../components/OEEDonut';
+import { MetricCarousel } from '../components/MetricCarousel';
+import { AvailabilityChart } from '../components/AvailabilityChart';
+import { ParetoChart } from '../components/ParetoChart';
 import { ShiftProduction } from '../components/ShiftProduction';
-import { ShiftDowntime } from '../components/ShiftDowntime';
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { 
+    shifts, 
+    selectedShiftId, 
+    setSelectedShiftId, 
+    data, 
+    loading, 
+    error, 
+    refresh,
+    refreshRow,
+  } = useDashboard();
 
-  const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1000);
-  };
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="text-red-500 mb-4">{error}</div>
+        <button onClick={refresh} className="px-4 py-2 bg-[#2F6BFF] text-white rounded">
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  const metrics = data?.metrics || [];
 
   return (
-    <div className="flex flex-col h-full bg-[#F6F7F9]">
+    <div className="bg-[#FAFBFC] min-h-screen">
       {/* Sticky Header */}
       <DashboardHeader
-        shift="Shift1"
-        date="2026-07-24"
-        onRefresh={handleRefresh}
-        onSearch={(query) => console.log('Search:', query)}
-        onSync={() => console.log('Sync')}
-        onHelp={() => console.log('Help')}
-        onAvatarClick={() => console.log('Avatar clicked')}
+        shifts={shifts}
+        selectedShiftId={selectedShiftId}
+        onShiftChange={setSelectedShiftId}
       />
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* OEE - 35% width */}
-          <div className="lg:col-span-4">
-            <ShiftOEE shift="Shift1, 2026-07-24" />
+      {/* Two-Column Layout */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Left Panel - Sticky on desktop */}
+          <div className="lg:w-[380px] lg:sticky lg:top-[72px] lg:self-start lg:max-h-[calc(100vh-100px)] lg:overflow-y-auto bg-[#FAFBFC] border-r border-[#E2E8F0] pr-4">
+            <div className="bg-white rounded-[12px] border border-[#F1F5F9] shadow-sm p-4 space-y-6">
+              
+              {/* Block 1: Shift OEE */}
+              <div>
+                <h2 className="text-[14px] font-semibold text-[#1E293B] mb-3">Shift OEE</h2>
+                <div className="flex flex-col items-center">
+                  <OEEDonut
+                    value={data?.oeeMetrics?.oee || 0}
+                    trend={data?.oeeMetrics?.trend || 0}
+                    label="OEE"
+                  />
+                  <div className="mt-4 w-full">
+                    <MetricCarousel metrics={metrics} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Block 2: Availability Comparison */}
+              <div>
+                <h2 className="text-[14px] font-semibold text-[#1E293B] mb-3">Availability comparision</h2>
+                <AvailabilityChart
+                  data={data?.availabilityComparison || []}
+                  loading={loading}
+                />
+              </div>
+
+              {/* Block 3: Downtime by Machine */}
+              <div>
+                <h2 className="text-[14px] font-semibold text-[#1E293B] mb-3">Downtime by machine</h2>
+                <ParetoChart
+                  data={data?.downtimeByMachine || []}
+                  loading={loading}
+                />
+              </div>
+
+              {/* Block 4: Downtime by Reason */}
+              <div>
+                <h2 className="text-[14px] font-semibold text-[#1E293B] mb-3">Downtime by reason</h2>
+                <ParetoChart
+                  data={data?.downtimeByReason || []}
+                  loading={loading}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Production - 65% width */}
-          <div className="lg:col-span-8">
-            <ShiftProduction shift="Shift1, 2026-07-24" />
+          {/* Right Panel - Shift Production */}
+          <div className="flex-1">
+            <ShiftProduction
+              groups={data?.productionGroups || []}
+              onRefreshRow={refreshRow}
+              onRefreshAll={refresh}
+            />
           </div>
-        </div>
-
-        {/* Downtime - Full width */}
-        <div className="mt-4">
-          <ShiftDowntime shift="Shift1, 2026-07-24" />
         </div>
       </div>
     </div>

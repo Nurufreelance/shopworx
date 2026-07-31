@@ -11,7 +11,7 @@ const Dashboard = lazy(() => import('@features/dashboard/pages/Dashboard'));
 // Production
 const ProductionPlanning = lazy(() => import('@features/production-planning/pages/ProductionPlanning'));
 
-// ✅ Fix: Use the direct path to the page file
+// Production Log
 const ProductionLog = lazy(() => import('@features/production-log/pages/ProductionLogPage'));
 
 // Downtime
@@ -56,7 +56,7 @@ export const router = createBrowserRouter(
       path: '/',
       element: <DashboardLayout />,
       children: [
-        // Dashboard
+        // Dashboard - Main landing page
         { index: true, element: <Suspense fallback={<PageLoader />}><Dashboard /></Suspense> },
         { path: 'home', element: <Suspense fallback={<PageLoader />}><Dashboard /></Suspense> },
         { path: 'dashboard', element: <Suspense fallback={<PageLoader />}><Dashboard /></Suspense> },

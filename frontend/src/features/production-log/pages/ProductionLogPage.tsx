@@ -1,6 +1,4 @@
-﻿// src/features/production-log/pages/ProductionLogPage.tsx
-
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ProductionSummary } from '../components/ProductionSummary';
 import { MachineGroup } from '../components/MachineGroup';
 import { ProductionSkeleton } from '../components/ProductionSkeleton';
@@ -23,15 +21,12 @@ const ProductionLogPage = () => {
   return (
     <div className="h-full bg-[#F7F8FA] overflow-y-auto">
       <div className="px-6 py-4">
-        {/* Shift Title */}
         <div className="text-[18px] font-medium text-[#1F2937] mb-1">
           Shift2
         </div>
 
-        {/* Summary bar */}
         <ProductionSummary total={totalRecords} />
 
-        {/* Machine Groups */}
         <div className="space-y-6 mt-2">
           {groupedData.map((group) => (
             <MachineGroup

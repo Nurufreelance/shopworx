@@ -1,3 +1,1 @@
-// src/features/production-log/index.ts
-
-export { default as ProductionLogPage } from './ProductionLogPage';
+﻿export { default as ProductionLog } from './ProductionLogPage';
