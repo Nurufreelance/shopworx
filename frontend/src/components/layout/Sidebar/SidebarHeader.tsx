@@ -26,7 +26,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ collapsed = false 
           className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
           style={{ backgroundColor: SIDEBAR.ACTIVE_BG }}
         >
-          <span className="text-white font-bold text-sm">SW</span>
+          <span className="text-white font-bold text-sm">ST</span>
         </div>
         
         {!collapsed && (
@@ -34,7 +34,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ collapsed = false 
             className="font-semibold text-white tracking-wide"
             style={{ fontSize: SIDEBAR.LOGO_FONT_SIZE }}
           >
-            ShopWorx
+            STRATIFY
           </span>
         )}
       </div>

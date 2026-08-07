@@ -22,7 +22,7 @@ export const Skeleton = ({ className, count = 1 }: SkeletonProps) => {
 };
 
 export const SkeletonCard = () => (
-  <div className="shopworx-card">
+  <div className="stratify-card">
     <div className="flex justify-between items-start mb-3">
       <Skeleton className="h-4 w-24" />
       <Skeleton className="h-4 w-16" />
@@ -37,7 +37,7 @@ export const SkeletonCard = () => (
 );
 
 export const SkeletonTable = () => (
-  <div className="shopworx-card">
+  <div className="stratify-card">
     <div className="flex justify-between mb-4">
       <Skeleton className="h-6 w-32" />
       <Skeleton className="h-6 w-24" />

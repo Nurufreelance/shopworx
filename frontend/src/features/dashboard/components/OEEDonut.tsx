@@ -1,17 +1,15 @@
 // src/features/dashboard/components/OEEDonut.tsx
 
-import React from 'react';
-
 interface OEEDonutProps {
   value: number;
   trend: number;
   label: string;
+  size?: number;
 }
 
-export const OEEDonut: React.FC<OEEDonutProps> = ({ value, trend, label = 'OEE' }) => {
-  const size = 220;
+export function OEEDonut({ value, trend, label = 'OEE', size = 220 }: OEEDonutProps) {
   const radius = size / 2;
-  const strokeWidth = 22;
+  const strokeWidth = Math.max(12, Math.min(24, size * 0.1));
   const circumference = 2 * Math.PI * (radius - strokeWidth / 2);
   const progress = Math.min((value / 100) * circumference, circumference);
   const isPositive = trend >= 0;

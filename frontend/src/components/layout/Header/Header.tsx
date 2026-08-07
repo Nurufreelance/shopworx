@@ -26,7 +26,7 @@ export const Header = () => {
   // Get page title based on route
   const getPageTitle = () => {
     const path = location.pathname;
-    if (path === '/' || path === '/home' || path === '/dashboard') return 'Dashboard';
+    if (path === '/' || path === '/home' || path === '/dashboard') return '';
     if (path.includes('production-planning')) return 'Production Planning';
     if (path.includes('production-log')) return 'Production Log';
     if (path.includes('downtime-log')) return 'Downtime Log';
@@ -38,14 +38,18 @@ export const Header = () => {
     return '';
   };
 
+  const pageTitle = getPageTitle();
+
   return (
     <header className="bg-white border-b border-[#E5E7EB] px-4 sm:px-6 py-3">
       <div className="flex items-center justify-between">
         {/* Left: Page Title */}
         <div className="flex items-center">
-          <h1 className="text-[15px] font-semibold text-[#1F2937]">
-            {getPageTitle()}
-          </h1>
+          {pageTitle ? (
+            <h1 className="text-[15px] font-semibold text-[#1F2937]">
+              {pageTitle}
+            </h1>
+          ) : null}
         </div>
 
         {/* Right: Search + Icons */}

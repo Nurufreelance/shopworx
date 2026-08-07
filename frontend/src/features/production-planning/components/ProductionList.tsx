@@ -1,19 +1,7 @@
 ﻿// src/features/production-planning/components/ProductionList.tsx
 
 import React from 'react';
-
-interface ProductionPlan {
-  id: string;
-  planNumber: string;
-  part: string;
-  machine: string;
-  shift: string;
-  status: string;
-  quantity: number;
-  produced: number;
-  startDate: string;
-  endDate: string;
-}
+import { ProductionPlan } from '../types/productionPlanning';
 
 interface ProductionListProps {
   data: ProductionPlan[];
@@ -32,12 +20,18 @@ const ProductionList: React.FC<ProductionListProps> = ({ data, loading, onSelect
 
   const getStatusStyles = (status: string) => {
     switch (status) {
-      case 'running':
-        return 'bg-[#E8F5EE] text-[#2E9B6E]';
-      case 'stopped':
-        return 'bg-[#FDE8E8] text-[#D94A4A]';
-      case 'idle':
-        return 'bg-[#FDF5E8] text-[#D4A13E]';
+      case 'planned':
+        return 'bg-[#ECFDF5] text-[#166534]';
+      case 'in-progress':
+        return 'bg-[#DBEAFE] text-[#1D4ED8]';
+      case 'completed':
+        return 'bg-[#E0F2FE] text-[#0369A1]';
+      case 'delayed':
+        return 'bg-[#FEF3C7] text-[#92400E]';
+      case 'paused':
+        return 'bg-[#FEF2F2] text-[#B91C1C]';
+      case 'cancelled':
+        return 'bg-[#FEE2E2] text-[#B91C1C]';
       default:
         return 'bg-[#EBF2F9] text-[#3B82C4]';
     }
@@ -50,7 +44,7 @@ const ProductionList: React.FC<ProductionListProps> = ({ data, loading, onSelect
           <tr>
             <th className="px-3 py-2 text-left text-[10px] font-semibold text-[#7C8798] uppercase tracking-[0.04em]">Plan</th>
             <th className="px-3 py-2 text-left text-[10px] font-semibold text-[#7C8798] uppercase tracking-[0.04em]">Part</th>
-            <th className="px-3 py-2 text-left text-[10px] font-semibold text-[#7C8798] uppercase tracking-[0.04em]">Shift</th>
+            <th className="px-3 py-2 text-left text-[10px] font-semibold text-[#7C8798] uppercase tracking-[0.04em]">Machine</th>
             <th className="px-3 py-2 text-left text-[10px] font-semibold text-[#7C8798] uppercase tracking-[0.04em]">Status</th>
             <th className="px-3 py-2 text-right text-[10px] font-semibold text-[#7C8798] uppercase tracking-[0.04em]">Produced / Qty</th>
           </tr>
@@ -59,15 +53,20 @@ const ProductionList: React.FC<ProductionListProps> = ({ data, loading, onSelect
           {data.map((plan) => (
             <tr key={plan.id} className="hover:bg-[#F7F8FA] transition-colors">
               <td className="px-3 py-2 text-[12px] font-medium text-[#3B82C4]">{plan.planNumber}</td>
-              <td className="px-3 py-2 text-[12px] text-[#1A1F36]">{plan.part}</td>
-              <td className="px-3 py-2 text-[12px] text-[#7C8798]">{plan.shift}</td>
+              <td className="px-3 py-2 text-[12px] text-[#1A1F36]">{plan.part.name}</td>
+              <td
+                className="px-3 py-2 text-[12px] text-[#3B82C4] cursor-pointer hover:underline"
+                onClick={() => onSelectMachine(plan.equipment.name)}
+              >
+                {plan.equipment.name}
+              </td>
               <td className="px-3 py-2">
                 <span className={`text-[11px] px-2 py-0.5 rounded-[2px] ${getStatusStyles(plan.status)}`}>
                   {plan.status}
                 </span>
               </td>
               <td className="px-3 py-2 text-right text-[12px] font-medium text-[#1A1F36]">
-                {plan.produced.toLocaleString()} / {plan.quantity.toLocaleString()}
+                {plan.producedQuantity.toLocaleString()} / {plan.plannedQuantity.toLocaleString()}
               </td>
             </tr>
           ))}

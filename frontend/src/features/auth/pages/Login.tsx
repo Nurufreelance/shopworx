@@ -31,7 +31,7 @@ export default function Login() {
           {/* ===== LEFT SIDE - ILLUSTRATION ===== */}
           <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center">
             <div className="max-w-[480px] w-full">
-              {/* Illustration SVG - ShopWorx style */}
+              {/* Illustration SVG - STRATIFY style */}
               <svg viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
                 {/* Factory/Industry Illustration */}
                 <rect x="50" y="150" width="400" height="200" rx="8" fill="#E8EDF5" />
@@ -68,7 +68,7 @@ export default function Login() {
                 
                 {/* Text */}
                 <text x="250" y="395" textAnchor="middle" fontFamily="system-ui" fontSize="16" fill="#94A3B8" letterSpacing="4">
-                  SHOPWORX
+                  STRATIFY
                 </text>
               </svg>
               
@@ -88,7 +88,7 @@ export default function Login() {
                 </div>
                 <span className="text-[#1A1A2E] text-lg font-semibold tracking-wider">STELLANTIS</span>
               </div>
-              <span className="text-[#94A3B8] text-xs tracking-[0.2em] font-light">SHOPWORX</span>
+              <span className="text-[#94A3B8] text-xs tracking-[0.2em] font-light">STRATIFY</span>
             </div>
 
             {/* Form */}

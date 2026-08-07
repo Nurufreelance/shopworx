@@ -1,20 +1,20 @@
-﻿/* ShopWorx Design System Styles */
+﻿/* STRATIFY Design System Styles */
 
 /* ===== Layout ===== */
-.shopworx-layout {
+.stratify-layout {
   display: flex;
   min-height: 100vh;
   background: var(--color-background);
 }
 
-.shopworx-main {
+.stratify-main {
   flex: 1;
   padding: var(--spacing-xl);
   overflow-y: auto;
 }
 
 /* ===== Cards ===== */
-.shopworx-card {
+.stratify-card {
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -23,19 +23,19 @@
   transition: box-shadow 0.15s ease;
 }
 
-.shopworx-card:hover {
+.stratify-card:hover {
   box-shadow: var(--shadow-lg);
 }
 
 /* ===== Charts ===== */
-.shopworx-chart-container {
+.stratify-chart-container {
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
 }
 
-.shopworx-chart-title {
+.stratify-chart-title {
   font-size: var(--font-size-base);
   font-weight: 500;
   color: var(--color-text-primary);
@@ -43,16 +43,16 @@
 }
 
 /* ===== Tables ===== */
-.shopworx-table {
+.stratify-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.shopworx-table thead {
+.stratify-table thead {
   background: var(--color-background);
 }
 
-.shopworx-table th {
+.stratify-table th {
   padding: var(--spacing-sm) var(--spacing-lg);
   text-align: left;
   font-size: var(--font-size-xs);
@@ -63,19 +63,19 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.shopworx-table td {
+.stratify-table td {
   padding: var(--spacing-sm) var(--spacing-lg);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   border-bottom: 1px solid var(--color-border);
 }
 
-.shopworx-table tr:hover {
+.stratify-table tr:hover {
   background: var(--color-background);
 }
 
 /* ===== Status ===== */
-.shopworx-status-dot {
+.stratify-status-dot {
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -83,16 +83,16 @@
   margin-right: 6px;
 }
 
-.shopworx-status-dot-running {
+.stratify-status-dot-running {
   background: var(--color-success);
 }
-.shopworx-status-dot-idle {
+.stratify-status-dot-idle {
   background: var(--color-warning);
 }
-.shopworx-status-dot-offline {
+.stratify-status-dot-offline {
   background: var(--color-text-light);
 }
-.shopworx-status-dot-maintenance {
+.stratify-status-dot-maintenance {
   background: var(--color-error);
 }
 

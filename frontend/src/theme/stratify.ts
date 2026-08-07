@@ -1,5 +1,5 @@
-// src/theme/shopworx.ts
-export const shopworxTheme = {
+// src/theme/stratify.ts
+export const stratifyTheme = {
   colors: {
     primary: {
       50: '#EBF0FF',

@@ -109,7 +109,7 @@ export default function ShiftSummary() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="shopworx-card mb-6"
+          className="stratify-card mb-6"
         >
           <h3 className="text-[18px] font-medium text-[#1F2937] mb-4">Shift OEE</h3>
           <div className="flex flex-col items-center">
@@ -132,7 +132,7 @@ export default function ShiftSummary() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="shopworx-card mb-6"
+          className="stratify-card mb-6"
         >
           <h3 className="text-[13px] font-medium text-[#1F2937] mb-4">Availability comparison</h3>
           <AvailabilityChart data={mockAvailabilityData} />
@@ -143,7 +143,7 @@ export default function ShiftSummary() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="shopworx-card mb-6"
+          className="stratify-card mb-6"
         >
           <h3 className="text-[13px] font-medium text-[#1F2937] mb-4">Downtime by machine</h3>
           <DowntimeMachineChart data={mockDowntimeMachineData} />
@@ -154,7 +154,7 @@ export default function ShiftSummary() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="shopworx-card mb-6"
+          className="stratify-card mb-6"
         >
           <h3 className="text-[13px] font-medium text-[#1F2937] mb-4">Downtime by reason</h3>
           <DowntimeReasonChart data={mockDowntimeReasonData} />

@@ -1,175 +1,193 @@
 ﻿// src/features/production-planning/pages/ProductionPlanning.tsx
 
 import { useState, useEffect } from 'react';
-import ProductionList from '../components/ProductionList';
-import PlanningToolbar from '../components/PlanningToolbar';
-import FiltersDrawer from '../components/FiltersDrawer';
+import { ProductionPlan } from '../types/productionPlanning';
 import { useProductionPlans } from '../hooks/useProductionPlanning';
+import { PlanningTable } from '../components/PlanningTable';
+import FiltersDrawer from '../components/FiltersDrawer';
+import { AddPlanModal } from '../components/AddPlanModal';
+import { ReorderPlansModal } from '../components/ReorderPlansModal';
+import { TimelineView } from '../components/TimelineView';
+import { EquipmentChangeModal } from '../components/EquipmentChangeModal';
 
 export default function ProductionPlanning() {
   const [loading, setLoading] = useState(true);
   const [selectedMachine, setSelectedMachine] = useState<string | null>(null);
   const [selectedShift, setSelectedShift] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date('2026-08-02T00:00:00'));
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'overview' | 'production' | 'timeline' | 'planning' | 'jobs'>('overview');
+  const [isAddPlanOpen, setIsAddPlanOpen] = useState(false);
+  const [isReorderOpen, setIsReorderOpen] = useState(false);
+  const [isEquipmentChangeOpen, setIsEquipmentChangeOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'timeline' | 'table'>('table');
+  const [listView, setListView] = useState<'Day' | 'Week' | 'Month'>('Week');
+  const [isListMenuOpen, setIsListMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [planItems, setPlanItems] = useState<ProductionPlan[]>([]);
 
   const { data: plans = [], refetch } = useProductionPlans({
     machine: selectedMachine || undefined,
     shift: selectedShift !== 'all' ? selectedShift : undefined,
     status: selectedStatus !== 'all' ? selectedStatus : undefined,
     date: selectedDate,
+    listView,
+    search: searchQuery || undefined,
   });
+
+  useEffect(() => {
+    setPlanItems(plans);
+  }, [plans]);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
   }, []);
 
+  const handleAddPlanSave = (newPlan: any) => {
+    setPlanItems((prev) => [
+      {
+        id: `${Date.now()}`,
+        planNumber: newPlan.part,
+        part: { id: newPlan.part, name: newPlan.part, code: newPlan.part },
+        color: { id: 'NA', name: 'NA', code: 'NA' },
+        equipment: { id: newPlan.machine, name: newPlan.machine, code: newPlan.machine, department: 'Molding' },
+        plannedQuantity: Number(newPlan.quantity) || 0,
+        producedQuantity: 0,
+        rejectedQuantity: 0,
+        startDate: newPlan.startAt,
+        endDate: newPlan.startAt,
+        status: 'planned',
+        priority: 'medium',
+        isFavorite: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        createdBy: 'Planner',
+      },
+      ...prev,
+    ]);
+    setIsAddPlanOpen(false);
+  };
+
+  const handleReorderSave = (reorderedPlans: any[]) => {
+    setPlanItems(reorderedPlans);
+  };
+
+  const periodEnd = new Date(selectedDate);
+  if (listView === 'Week') periodEnd.setDate(periodEnd.getDate() + 6);
+  if (listView === 'Month') periodEnd.setDate(periodEnd.getDate() + 29);
+
+  const visiblePlans = planItems;
+
+  const handleFavoriteToggle = (planId: string) => {
+    setPlanItems((prev) => prev.map((plan) => plan.id === planId ? { ...plan, isFavorite: !plan.isFavorite } : plan));
+  };
+
+  const handleCopyPlan = (planId: string) => {
+    const plan = planItems.find((item) => item.id === planId);
+    if (!plan) return;
+    const copy = { ...plan, id: `${Date.now()}`, planNumber: `${plan.planNumber}-copy`, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    setPlanItems((prev) => [copy, ...prev]);
+  };
+
+  const handleDeletePlan = (planId: string) => {
+    setPlanItems((prev) => prev.filter((plan) => plan.id !== planId));
+  };
+
   return (
     <div className="flex h-screen bg-[#F4F5F7]">
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header - Compact */}
-        <div className="bg-[#F7F8FA] border-b border-[#D8DDE6] px-4 flex-shrink-0" style={{ height: '48px' }}>
-          <div className="flex items-center justify-between h-full">
-            <div className="flex items-center gap-4">
-              <h1 className="text-[16px] font-medium text-[#1A1F36]">Production Planning</h1>
-              <span className="text-[12px] text-[#7C8798]">
-                {new Date().toLocaleDateString('en-US', { 
-                  weekday: 'short',
-                  year: 'numeric', 
-                  month: 'short', 
-                  day: 'numeric' 
-                })}
-              </span>
-            </div>
-            <PlanningToolbar 
-              onRefresh={refetch} 
-              onFiltersToggle={() => setIsFiltersOpen(true)}
-            />
+        <div className="bg-[#F7F8FA] border-b border-[#D8DDE6] px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-[16px] font-semibold text-[#1A1F36]">Production Planning</h1>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="bg-white border-b border-[#D8DDE6] px-4 flex-shrink-0" style={{ height: '40px' }}>
-          <div className="flex items-center gap-6 h-full">
-            {['Overview', 'Production', 'Timeline', 'Planning', 'Jobs'].map((tab) => (
+        <div className="bg-white border-b border-[#D8DDE6] px-6 py-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-[13px] font-medium text-[#1A1F36]">
+                {selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })} - {periodEnd.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
               <button
-                key={tab}
-                onClick={() => setViewMode(tab.toLowerCase() as any)}
-                className={`text-[12px] font-medium h-full border-b-2 transition-colors ${
-                  viewMode === tab.toLowerCase() 
-                    ? 'border-[#3B82C4] text-[#1A1F36]' 
-                    : 'border-transparent text-[#7C8798] hover:text-[#1A1F36]'
-                }`}
+                type="button"
+                onClick={() => setIsEquipmentChangeOpen(true)}
+                className="h-10 inline-flex items-center gap-2 rounded-[4px] bg-[#10B981] px-4 text-[12px] font-semibold text-white hover:bg-[#0F766E] transition"
               >
-                {tab}
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-sm bg-white text-[#10B981]">↔</span>
+                Equipment Change
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Toolbar */}
-        <div className="bg-white border-b border-[#D8DDE6] px-4 flex-shrink-0" style={{ height: '44px' }}>
-          <div className="flex items-center h-full">
-            {/* Left Group - Actions */}
-            <div className="flex items-center gap-2">
-              <select className="h-8 px-3 text-[12px] bg-[#F7F8FA] border border-[#D8DDE6] rounded-[2px] focus:outline-none focus:border-[#3B82C4] text-[#1A1F36]">
-                <option>HT-28</option>
-                <option>HT-29</option>
-                <option>HT-30</option>
-                <option>HT-31</option>
-              </select>
-
-              <div className="w-px h-5 bg-[#D8DDE6]" />
-
-              <button className="h-8 px-3 text-[12px] font-medium text-white bg-[#3B82C4] hover:bg-[#2F6FA3] rounded-[2px] transition-colors flex items-center gap-1">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                </svg>
-                Add New Plan
+              <button
+                type="button"
+                onClick={() => setIsAddPlanOpen(true)}
+                className="h-10 inline-flex items-center justify-center rounded-[4px] bg-[#2563EB] px-4 text-[12px] font-semibold text-white hover:bg-[#1D4ED8] transition"
+              >
+                + Add new plan
               </button>
-
-              <button className="h-8 px-3 text-[12px] font-medium text-[#424B5A] bg-[#F7F8FA] hover:bg-[#EEF0F3] rounded-[2px] transition-colors flex items-center gap-1">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                </svg>
-                Re-order
+              <button
+                type="button"
+                onClick={() => setIsReorderOpen(true)}
+                className="h-10 inline-flex items-center justify-center rounded-[4px] border border-[#3B82C4] bg-white px-4 text-[12px] font-semibold text-[#3B82C4] hover:bg-[#EFF6FF] transition"
+              >
+                Re-order plans
               </button>
-
-              <button className="h-8 px-3 text-[12px] font-medium text-[#424B5A] bg-[#F7F8FA] hover:bg-[#EEF0F3] rounded-[2px] transition-colors flex items-center gap-1">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-                </svg>
-                Expand All
-              </button>
-            </div>
-
-            {/* Spacer */}
-            <div className="flex-1" />
-
-            {/* Right Group - Utilities */}
-            <div className="flex items-center gap-1">
-              <button className="h-8 px-3 text-[12px] font-medium text-[#424B5A] bg-[#F7F8FA] hover:bg-[#EEF0F3] rounded-[2px] transition-colors flex items-center gap-1">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                Views ▼
-              </button>
-
-              <div className="relative w-[180px]">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full h-8 pl-7 pr-3 text-[12px] bg-[#F7F8FA] border border-[#D8DDE6] rounded-[2px] focus:outline-none focus:border-[#3B82C4] placeholder:text-[#A0A8B5]"
-                />
-                <svg className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#A0A8B5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsListMenuOpen((prev) => !prev)}
+                  className="h-10 inline-flex items-center justify-between rounded-[4px] border border-[#D8DDE6] bg-white px-4 text-[12px] font-medium text-[#1F2937] hover:bg-[#F8FAFC] transition"
+                >
+                  List
+                  <span className="ml-2 text-[#6B7280]">▾</span>
+                </button>
+                {isListMenuOpen && (
+                  <div className="absolute right-0 z-20 mt-2 w-32 overflow-hidden rounded-[4px] border border-[#E5E7EB] bg-white shadow-lg">
+                    {(['Day', 'Week', 'Month'] as const).map((view) => (
+                      <button
+                        key={view}
+                        type="button"
+                        onClick={() => {
+                          setListView(view);
+                          setIsListMenuOpen(false);
+                        }}
+                        className="w-full px-3 py-2 text-left text-[12px] text-[#1F2937] hover:bg-[#F8FAFC]"
+                      >
+                        {view}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-
-              <button className="p-1.5 text-[#7C8798] hover:text-[#1A1F36] hover:bg-[#F7F8FA] rounded-[2px] transition-colors" title="Refresh">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-              </button>
-
-              <button className="p-1.5 text-[#7C8798] hover:text-[#1A1F36] hover:bg-[#F7F8FA] rounded-[2px] transition-colors" title="Filters" onClick={() => setIsFiltersOpen(true)}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
-              </button>
-
-              <button className="p-1.5 text-[#7C8798] hover:text-[#1A1F36] hover:bg-[#F7F8FA] rounded-[2px] transition-colors" title="Export">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-              </button>
-
-              <button className="p-1.5 text-[#7C8798] hover:text-[#1A1F36] hover:bg-[#F7F8FA] rounded-[2px] transition-colors" title="Settings">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                </svg>
+              <button
+                type="button"
+                onClick={() => setIsFiltersOpen(true)}
+                className="h-10 inline-flex items-center justify-center rounded-[4px] border border-[#D8DDE6] bg-white px-4 text-[12px] font-medium text-[#1F2937] hover:bg-[#F8FAFC] transition"
+              >
+                Filters
               </button>
             </div>
           </div>
         </div>
 
-        {/* Table - Full remaining space with scroll */}
         <div className="flex-1 overflow-hidden p-4">
-          <div className="h-full overflow-y-scroll overflow-x-scroll">
-            <ProductionList 
-              data={plans} 
-              loading={loading}
-              onSelectMachine={setSelectedMachine}
-            />
+          <div className="h-full overflow-auto">
+            {viewMode === 'timeline' ? (
+              <TimelineView plans={visiblePlans} selectedDate={selectedDate} onMachineSelect={setSelectedMachine} />
+            ) : (
+              <PlanningTable
+                plans={visiblePlans}
+                onPlanClick={(id) => console.log('Clicked plan', id)}
+                onFavoriteToggle={handleFavoriteToggle}
+                onCopyPlan={handleCopyPlan}
+                onDeletePlan={handleDeletePlan}
+              />
+            )}
           </div>
         </div>
       </div>
 
-      {/* Filters Drawer */}
       <FiltersDrawer
         isOpen={isFiltersOpen}
         onClose={() => setIsFiltersOpen(false)}
@@ -182,6 +200,10 @@ export default function ProductionPlanning() {
         selectedMachine={selectedMachine}
         onMachineChange={setSelectedMachine}
       />
+
+      <AddPlanModal isOpen={isAddPlanOpen} onClose={() => setIsAddPlanOpen(false)} onSave={handleAddPlanSave} />
+      <ReorderPlansModal isOpen={isReorderOpen} onClose={() => setIsReorderOpen(false)} plans={planItems} onSave={handleReorderSave} />
+      <EquipmentChangeModal isOpen={isEquipmentChangeOpen} onClose={() => setIsEquipmentChangeOpen(false)} plans={planItems} />
     </div>
   );
 }

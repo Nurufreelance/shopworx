@@ -29,8 +29,8 @@ export const SIDEBAR = {
   ITEM_RADIUS_ACTIVE: '0 20px 20px 0', // Active state same
   
   // Colors
-  BACKGROUND: '#1F1F1F',
-  BACKGROUND_HOVER: '#2A2A2A',
+  BACKGROUND: '#1A233B',
+  BACKGROUND_HOVER: '#1E2A52',
   ACTIVE_BG: '#F97316',
   ACTIVE_SHADOW: '0 4px 20px rgba(249, 115, 22, 0.4)',
   TEXT_COLOR: '#A0A0A0',

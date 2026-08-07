@@ -54,7 +54,7 @@ export const Sidebar = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "fixed top-0 left-0 z-40 h-screen bg-[#1F1F1F] transition-all duration-300 ease-in-out flex flex-col",
+          "fixed top-0 left-0 z-40 h-screen bg-[#1A233B] transition-all duration-300 ease-in-out flex flex-col",
           isDesktop && sidebarOpen ? "w-[280px]" : "",
           isDesktop && !sidebarOpen ? "w-[85px]" : "",
           isMobile && sidebarOpen ? "w-[280px] translate-x-0" : "",

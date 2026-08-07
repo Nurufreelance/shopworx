@@ -62,7 +62,7 @@ const mockDowntimeReasonData = [
 
 // ==================== OEE GAUGE COMPONENT ====================
 const OEEGauge = ({ value, trend }: { value: number; trend: number }) => {
-  const size = 180;
+  const size = 220;
   const radius = size / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = (value / 100) * circumference;
@@ -366,14 +366,14 @@ export function ShiftOEE({ shift = 'Shift2, 2026-07-20' }: ShiftOEEProps) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-[8px] border border-[#E5E7EB] shadow-sm p-4">
+      <div className="bg-white rounded-[8px] border border-[#E5E7EB] shadow-sm p-5">
         <div className="flex items-center justify-center h-48 text-[#999999]">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-[8px] border border-[#E5E7EB] shadow-sm p-4">
+    <div className="bg-white rounded-[8px] border border-[#E5E7EB] shadow-sm p-5">
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}

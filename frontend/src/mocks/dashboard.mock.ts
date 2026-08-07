@@ -19,7 +19,7 @@ export const mockDashboard = {
     })),
   },
   machines: Array.from({ length: 24 }, (_, i) => ({
-    id: HT-,
+    id: `HT-${i}`,
     status: ['Running', 'Running', 'Idle', 'Offline', 'Running'][i % 5],
     operator: ['John D', 'Sarah S', 'Mike W', 'Emma R', 'James B'][i % 5],
     efficiency: 85 + (i % 15),
